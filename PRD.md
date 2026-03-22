@@ -58,6 +58,7 @@ The tool targets first-time buyers (including those considering shared ownership
 29. As a Pro user, I want access to the Area Finder and property comparison, so that I get deeper insights worth paying for.
 30. As a user, I want to adjust the interest rate, so that I can model different rate scenarios (e.g. rates dropping or rising).
 31. As a user, I want to select different mortgage terms (15/20/25/30/35 years), so that I can see how the term affects my monthly payment.
+32. As a buyer receiving financial help from family, I want to enter additional funds separately from my own savings, so that my total deposit is accurate and the deposit tracker knows how much I still need to save myself.
 
 ---
 
@@ -89,7 +90,13 @@ The application is composed of these key modules:
 ### Lending Multiple
 
 - Configurable by the user: 4× (conservative), 4.5× (standard, default), 5× (stretch).
-- Max affordable price = (combined salary × lending multiple) + deposit.
+- Max affordable price = (combined salary × lending multiple) + total deposit (own savings + additional funds).
+
+### Additional Funds
+
+- A non-descript "Additional funds" field (£) on the affordability calculator. Intentionally vague — could be a gift from parents, inheritance, work bonus, or any other lump sum.
+- Added to the user's own deposit to form the **total deposit** used in all calculations (loan amount, lending multiple, stamp duty, area finder).
+- In the Deposit Tracker, the target becomes: deposit needed minus additional funds. The tracker only projects how long *your own savings* take to reach the remaining amount.
 
 ### Shared Ownership / Help to Buy
 

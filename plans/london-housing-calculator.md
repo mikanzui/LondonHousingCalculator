@@ -33,9 +33,11 @@ This is the first demoable slice: a working page with a form, real calculations,
 
 ### Acceptance criteria
 
-- [ ] HTML form accepts: gross salary, property price, deposit, interest rate (default 5.5%), mortgage term (dropdown: 15/20/25/30/35 years)
+- [ ] HTML form accepts: gross salary, property price, deposit, additional funds (default £0), interest rate (default 5.5%), mortgage term (dropdown: 15/20/25/30/35 years)
+- [ ] "Additional funds" field labelled non-descriptly — tooltip: "Gift from family, inheritance, bonus, or any other lump sum"
+- [ ] Total deposit = deposit + additional funds
 - [ ] Monthly mortgage payment calculated using `M = P * r(1+r)^n / ((1+r)^n - 1)`
-- [ ] Loan amount displayed (property price − deposit)
+- [ ] Loan amount displayed (property price − total deposit)
 - [ ] Lending multiple displayed (loan / salary)
 - [ ] % of take-home pay spent on housing displayed
 - [ ] Risk badge: < 30% = ✅ Safe, 30–45% = ⚠️ Stretch, > 45% = 🔴 Risky
@@ -122,6 +124,8 @@ A new tab: "Deposit Tracker". The user enters current savings, monthly contribut
 - [ ] New "Deposit" tab in the navigation
 - [ ] Inputs: current savings, monthly contribution, LISA toggle, annual growth rate (default 4%)
 - [ ] Deposit target pre-filled from affordability calculator's deposit field (if entered)
+- [ ] Additional funds carried from affordability calculator — subtracted from target (user only needs to save the difference)
+- [ ] Tracker clearly shows: "You need £X. With £Y additional funds, you need to save £Z."
 - [ ] LISA bonus: 25% on contributions up to £4,000/year
 - [ ] Projected savings displayed year-by-year
 - [ ] Chart.js timeline chart showing savings growth over time

@@ -19,7 +19,8 @@
 | Annual gross salary | £ number | — | Required |
 | Partner salary (optional) | £ number | 0 | Joint application |
 | Property price | £ number | — | Required |
-| Deposit amount | £ number | — | Required |
+| Deposit amount | £ number | — | Required (your own savings) |
+| Additional funds | £ number | 0 | Gift from family, inheritance, bonus — any lump sum |
 | Interest rate (%) | number | 5.5 | Pre-filled with current avg |
 | Mortgage term (years) | number | 30 | Dropdown: 15/20/25/30/35 |
 | Monthly service charge | £ number | 0 | Common for London flats |
@@ -28,7 +29,8 @@
 **Outputs:**
 | Output | Formula / Logic |
 |---|---|
-| Loan amount | Property price − Deposit |
+| Total deposit | Deposit + Additional funds |
+| Loan amount | Property price − Total deposit |
 | Monthly mortgage payment | Standard amortisation formula: `M = P * r(1+r)^n / ((1+r)^n - 1)` |
 | Total monthly housing cost | Mortgage + service charge + ground rent |
 | % of take-home pay spent | Total monthly cost / (net monthly income) × 100 |
@@ -57,7 +59,7 @@
 |---|---|
 | Government bonus (LISA) | 25% on contributions up to £4,000/year |
 | Projected savings by year | Compound growth + contributions + LISA bonus |
-| Time to reach deposit target | Months until savings ≥ deposit amount |
+| Time to reach deposit target | Months until own savings ≥ (deposit target − additional funds) |
 | Visual timeline chart | Simple bar or line chart |
 
 ---
