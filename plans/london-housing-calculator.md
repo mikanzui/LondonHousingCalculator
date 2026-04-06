@@ -242,3 +242,80 @@ Final responsive audit and production polish. Ensure all tabs work correctly at 
 - [ ] "Data last updated: [date]" footer on Area Finder tab
 - [ ] Lighthouse mobile score > 90 for performance
 - [ ] All existing tests still pass
+
+---
+
+## UI/UX Design System
+
+> Based on [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) — Personal Finance Tracker category
+
+### Design Pattern
+
+- **Pattern:** Feature-Showcase with Calculator Focus
+- **Conversion:** Utility-driven — users arrive to calculate, results encourage Pro upgrade
+- **CTA:** Calculate button prominent above fold; Pro upgrade surfaced after free results
+- **Sections:** Tab navigation — Affordability → Deposit → Area Finder → Compare
+
+### Style: Clean Minimalism with Soft UI touches
+
+- **Keywords:** Clean lines, generous whitespace, soft shadows, subtle depth, trustworthy, professional
+- **Best For:** Finance tools, calculators, personal finance trackers
+- **Performance:** Excellent (no heavy assets) | **Accessibility:** WCAG AA
+
+### Colour Palette
+
+| Token | Hex | Usage |
+|---|---|---|
+| Primary | `#0984e3` | CTAs, links, active states, focus rings |
+| Primary hover | `#0770c4` | Button hover, link hover |
+| Primary light | `#e8f4fd` | Selected tab background, info highlights |
+| Surface | `#ffffff` | Cards, form backgrounds |
+| Background | `#f0f4f8` | Page background |
+| Text primary | `#1a1a2e` | Headings, key values |
+| Text secondary | `#4a5568` | Labels, supporting text |
+| Text muted | `#a0aec0` | Placeholder, disclaimer text |
+| Border | `#e2e8f0` | Input borders, dividers, card borders |
+| Safe (green) | `#48bb78` | Safe badge bg: `#c6f6d5`, text: `#22543d` |
+| Stretch (amber) | `#ecc94b` | Stretch badge bg: `#fefcbf`, text: `#744210` |
+| Risky (red) | `#f56565` | Risky badge bg: `#fed7d7`, text: `#742a2a` |
+| Error | `#e53e3e` | Validation error text and border |
+
+### Typography
+
+- **Headings:** Inter (600/700 weight) — clean, modern, highly legible
+- **Body:** Inter (400/500 weight) — single font family for performance
+- **Monospace numbers:** `font-variant-numeric: tabular-nums` on all financial figures
+- **Scale:** 12px labels → 14px body → 16px input → 18px section → 24px page title → 32px hero
+- **Line height:** 1.5 body, 1.3 headings
+- **Max line width:** 65ch for readability
+- **Google Fonts:** `https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap`
+
+### Key Effects
+
+- **Shadows:** `0 1px 3px rgba(0,0,0,0.08)` cards, `0 4px 16px rgba(0,0,0,0.12)` elevated
+- **Border radius:** 12px cards, 8px inputs/buttons, 20px badges
+- **Transitions:** 200ms ease-out for hover/focus states
+- **Focus ring:** `0 0 0 3px rgba(9,132,227,0.25)` on focus-visible
+- **Tab indicator:** 2px bottom border on active tab with primary colour
+
+### Anti-Patterns to Avoid
+
+- No emoji as structural icons (use SVG: Lucide icons via CDN)
+- No dark gradients or neon colours
+- No animation > 300ms for micro-interactions
+- No placeholder-only labels
+- No colour-only meaning (always text + icon with badges)
+- No disable-zoom viewport
+
+### Pre-Delivery Checklist
+
+- [ ] SVG icons used (Lucide) — no emoji as structural icons
+- [ ] `cursor: pointer` on all clickable elements
+- [ ] Hover states with smooth transitions (200ms ease-out)
+- [ ] Text contrast ≥ 4.5:1 in light mode
+- [ ] Focus states visible for keyboard nav (focus-visible ring)
+- [ ] `prefers-reduced-motion` respected
+- [ ] Responsive: 375px, 768px, 1024px, 1440px
+- [ ] Tabular nums on all financial figures
+- [ ] Inline validation errors near field with `role="alert"`
+- [ ] Tab navigation fully keyboard-accessible

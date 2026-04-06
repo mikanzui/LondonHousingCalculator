@@ -3,112 +3,403 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Free London housing affordability calculator for first-time buyers. See your real monthly cost, take-home pay, stamp duty, and risk rating.">
+  <meta name="description" content="Free London housing affordability calculator for first-time buyers. See your real monthly cost, take-home pay, stamp duty, risk rating, and which boroughs you can afford.">
   <meta property="og:title" content="London Housing Calculator">
   <meta property="og:description" content="Realistic affordability for real London buyers. Free mortgage calculator with built-in UK tax estimator.">
   <title>London Housing Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-  <header>
-    <h1>London Housing Calculator</h1>
-    <p class="tagline">Realistic affordability for real London buyers</p>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <h1>London Housing Calculator</h1>
+      </div>
+      <p class="tagline">Realistic affordability for real London buyers</p>
+    </div>
   </header>
 
+  <!-- Tab Navigation -->
+  <nav class="tab-bar" role="tablist" aria-label="Calculator sections">
+    <button role="tab" aria-selected="true" aria-controls="tab-affordability" id="btn-affordability" class="tab-btn active" data-tab="affordability">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <span>Affordability</span>
+    </button>
+    <button role="tab" aria-selected="false" aria-controls="tab-deposit" id="btn-deposit" class="tab-btn" data-tab="deposit">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg>
+      <span>Deposit</span>
+    </button>
+    <button role="tab" aria-selected="false" aria-controls="tab-area" id="btn-area" class="tab-btn" data-tab="area">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Areas</span>
+    </button>
+    <button role="tab" aria-selected="false" aria-controls="tab-compare" id="btn-compare" class="tab-btn" data-tab="compare">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Compare</span>
+    </button>
+  </nav>
+
   <main>
-    <form id="affordability-form" novalidate>
-      <!-- Income Section -->
-      <fieldset>
-        <legend>Your Income</legend>
+    <!-- ===== AFFORDABILITY TAB ===== -->
+    <section id="tab-affordability" role="tabpanel" aria-labelledby="btn-affordability" class="tab-panel active">
+      <form id="affordability-form" novalidate>
+        <div class="card">
+          <fieldset>
+            <legend>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Your Income
+            </legend>
 
-        <div class="form-group">
-          <label for="salary">Annual Gross Salary (£) <span class="required">*</span></label>
-          <input type="number" id="salary" name="salary" min="1" step="100" required placeholder="e.g. 35000" aria-required="true">
+            <div class="form-group">
+              <label for="salary">Annual Gross Salary (£) <span class="required" aria-label="required">*</span></label>
+              <input type="number" id="salary" name="salary" min="1" step="100" required placeholder="e.g. 35,000" aria-required="true" inputmode="numeric">
+            </div>
+
+            <div class="form-group">
+              <label for="student-loan">Student Loan Plan</label>
+              <select id="student-loan" name="student-loan">
+                <option value="none">None</option>
+                <option value="plan1">Plan 1</option>
+                <option value="plan2">Plan 2</option>
+                <option value="plan4">Plan 4 (Scotland)</option>
+                <option value="plan5">Plan 5</option>
+                <option value="postgrad">Postgraduate Loan</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="pension-percent">Pension (%)</label>
+                <input type="number" id="pension-percent" name="pension-percent" min="0" max="100" step="0.5" value="0" inputmode="decimal">
+              </div>
+              <div class="form-group">
+                <label for="pension-type">Pension Type</label>
+                <select id="pension-type" name="pension-type">
+                  <option value="sacrifice">Salary Sacrifice</option>
+                  <option value="netpay">Net Pay</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
         </div>
 
-        <div class="form-group">
-          <label for="student-loan">Student Loan Plan</label>
-          <select id="student-loan" name="student-loan">
-            <option value="none">None</option>
-            <option value="plan1">Plan 1</option>
-            <option value="plan2">Plan 2</option>
-            <option value="plan4">Plan 4 (Scotland)</option>
-            <option value="plan5">Plan 5</option>
-            <option value="postgrad">Postgraduate Loan</option>
-          </select>
+        <div class="card">
+          <fieldset>
+            <legend>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Property Details
+            </legend>
+
+            <div class="form-group">
+              <label for="property-price">Property Price (£) <span class="required" aria-label="required">*</span></label>
+              <input type="number" id="property-price" name="property-price" min="1" step="1000" required placeholder="e.g. 350,000" aria-required="true" inputmode="numeric">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="deposit">Your Deposit (£) <span class="required" aria-label="required">*</span></label>
+                <input type="number" id="deposit" name="deposit" min="0" step="1000" required value="0" aria-required="true" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="additional-funds">
+                  Additional Funds (£)
+                  <button type="button" class="tooltip-trigger" aria-label="Gift from family, inheritance, bonus, or any other lump sum" tabindex="0">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                  </button>
+                </label>
+                <input type="number" id="additional-funds" name="additional-funds" min="0" step="1000" value="0" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="interest-rate">Interest Rate (%)</label>
+                <input type="number" id="interest-rate" name="interest-rate" min="0" max="15" step="0.1" value="5.5" inputmode="decimal">
+              </div>
+              <div class="form-group">
+                <label for="mortgage-term">Mortgage Term</label>
+                <select id="mortgage-term" name="mortgage-term">
+                  <option value="15">15 years</option>
+                  <option value="20">20 years</option>
+                  <option value="25">25 years</option>
+                  <option value="30" selected>30 years</option>
+                  <option value="35">35 years</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="first-time-buyer" name="first-time-buyer" checked>
+              <label for="first-time-buyer">I am a first-time buyer</label>
+            </div>
+          </fieldset>
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="pension-percent">Pension Contribution (%)</label>
-            <input type="number" id="pension-percent" name="pension-percent" min="0" max="100" step="0.5" value="0">
+        <button type="submit" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Calculate Affordability
+        </button>
+      </form>
+
+      <section id="results" hidden aria-live="polite"></section>
+    </section>
+
+    <!-- ===== DEPOSIT TAB ===== -->
+    <section id="tab-deposit" role="tabpanel" aria-labelledby="btn-deposit" class="tab-panel" hidden>
+      <form id="deposit-form" novalidate>
+        <div class="card">
+          <fieldset>
+            <legend>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg>
+              Deposit Tracker
+            </legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="dep-current-savings">Current Savings (£)</label>
+                <input type="number" id="dep-current-savings" min="0" step="100" value="0" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="dep-monthly-contribution">Monthly Savings (£) <span class="required" aria-label="required">*</span></label>
+                <input type="number" id="dep-monthly-contribution" min="0" step="50" required placeholder="e.g. 500" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="dep-target">Deposit Target (£) <span class="required" aria-label="required">*</span></label>
+                <input type="number" id="dep-target" min="1" step="1000" required placeholder="e.g. 50,000" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="dep-additional">Additional Funds (£)</label>
+                <input type="number" id="dep-additional" min="0" step="1000" value="0" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="dep-growth-rate">Annual Growth Rate (%)</label>
+                <input type="number" id="dep-growth-rate" min="0" max="20" step="0.5" value="4" inputmode="decimal">
+              </div>
+              <div class="form-group">
+                <label for="dep-property-price">Expected Property Price (£)</label>
+                <input type="number" id="dep-property-price" min="0" step="1000" value="0" inputmode="numeric">
+                <span class="helper-text">For LISA eligibility check (£450k cap)</span>
+              </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="dep-lisa" name="dep-lisa" checked>
+              <label for="dep-lisa">Using a Lifetime ISA (LISA)</label>
+            </div>
+            <p class="info-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              LISA: 25% bonus on up to £4,000/year. Must be 18–39 to open. Property must be ≤£450,000.
+            </p>
+          </fieldset>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Project Savings
+        </button>
+      </form>
+
+      <section id="deposit-results" hidden aria-live="polite"></section>
+      <div id="deposit-chart-container" class="chart-container" hidden>
+        <canvas id="deposit-chart" aria-label="Deposit savings projection chart"></canvas>
+      </div>
+    </section>
+
+    <!-- ===== AREA FINDER TAB ===== -->
+    <section id="tab-area" role="tabpanel" aria-labelledby="btn-area" class="tab-panel" hidden>
+      <form id="area-form" novalidate>
+        <div class="card">
+          <fieldset>
+            <legend>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Where Can I Afford?
+            </legend>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="area-salary">Annual Salary (£) <span class="required" aria-label="required">*</span></label>
+                <input type="number" id="area-salary" min="1" step="100" required placeholder="e.g. 35,000" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="area-deposit">Total Deposit (£)</label>
+                <input type="number" id="area-deposit" min="0" step="1000" value="0" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="area-type">Property Type</label>
+                <select id="area-type">
+                  <option value="any">Any</option>
+                  <option value="flat">Flat</option>
+                  <option value="terraced">Terraced</option>
+                  <option value="semi">Semi-detached</option>
+                  <option value="detached">Detached</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="area-beds">Bedrooms</label>
+                <select id="area-beds">
+                  <option value="any">Any</option>
+                  <option value="1bed">1 bed</option>
+                  <option value="2bed">2 bed</option>
+                  <option value="3bed">3 bed</option>
+                  <option value="4bed">4+</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="area-multiple">Lending Multiple</label>
+                <select id="area-multiple">
+                  <option value="4">4× (Conservative)</option>
+                  <option value="4.5" selected>4.5× (Standard)</option>
+                  <option value="5">5× (Stretch)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="area-sort">Sort By</label>
+                <select id="area-sort">
+                  <option value="price">Price (low → high)</option>
+                  <option value="affordability">% of income</option>
+                  <option value="change5yr">5yr growth</option>
+                  <option value="name">Borough name</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="area-comfort">Max % of income on housing: <span id="area-comfort-value">35%</span></label>
+              <input type="range" id="area-comfort" min="20" max="60" value="35" step="5">
+            </div>
+          </fieldset>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Find Affordable Boroughs
+        </button>
+      </form>
+
+      <section id="area-results" hidden aria-live="polite"></section>
+    </section>
+
+    <!-- ===== COMPARE TAB ===== -->
+    <section id="tab-compare" role="tabpanel" aria-labelledby="btn-compare" class="tab-panel" hidden>
+      <form id="compare-form" novalidate>
+        <div class="compare-grid">
+          <div class="card">
+            <fieldset>
+              <legend>Property A</legend>
+              <div class="form-group">
+                <label for="cmp-a-price">Price (£) <span class="required" aria-label="required">*</span></label>
+                <input type="number" id="cmp-a-price" min="1" step="1000" required placeholder="e.g. 350,000" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="cmp-a-deposit">Deposit (£)</label>
+                <input type="number" id="cmp-a-deposit" min="0" step="1000" value="0" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="cmp-a-rate">Rate (%)</label>
+                <input type="number" id="cmp-a-rate" min="0" max="15" step="0.1" value="5.5" inputmode="decimal">
+              </div>
+              <div class="form-group">
+                <label for="cmp-a-term">Term</label>
+                <select id="cmp-a-term">
+                  <option value="15">15 years</option>
+                  <option value="20">20 years</option>
+                  <option value="25">25 years</option>
+                  <option value="30" selected>30 years</option>
+                  <option value="35">35 years</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="cmp-a-service">Service Charge (£/mo)</label>
+                <input type="number" id="cmp-a-service" min="0" step="10" value="0" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="cmp-a-ground">Ground Rent (£/mo)</label>
+                <input type="number" id="cmp-a-ground" min="0" step="10" value="0" inputmode="numeric">
+              </div>
+            </fieldset>
           </div>
-          <div class="form-group">
-            <label for="pension-type">Pension Type</label>
-            <select id="pension-type" name="pension-type">
-              <option value="sacrifice">Salary Sacrifice</option>
-              <option value="netpay">Net Pay</option>
-            </select>
-          </div>
-        </div>
-      </fieldset>
 
-      <!-- Property Section -->
-      <fieldset>
-        <legend>Property Details</legend>
-
-        <div class="form-group">
-          <label for="property-price">Property Price (£) <span class="required">*</span></label>
-          <input type="number" id="property-price" name="property-price" min="1" step="1000" required placeholder="e.g. 350000" aria-required="true">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="deposit">Your Deposit (£) <span class="required">*</span></label>
-            <input type="number" id="deposit" name="deposit" min="0" step="1000" required value="0" aria-required="true">
-          </div>
-          <div class="form-group">
-            <label for="additional-funds">
-              Additional Funds (£)
-              <span class="tooltip" aria-label="Gift from family, inheritance, bonus, or any other lump sum">ⓘ</span>
-            </label>
-            <input type="number" id="additional-funds" name="additional-funds" min="0" step="1000" value="0">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="interest-rate">Interest Rate (%)</label>
-            <input type="number" id="interest-rate" name="interest-rate" min="0" max="15" step="0.1" value="5.5">
-          </div>
-          <div class="form-group">
-            <label for="mortgage-term">Mortgage Term</label>
-            <select id="mortgage-term" name="mortgage-term">
-              <option value="15">15 years</option>
-              <option value="20">20 years</option>
-              <option value="25">25 years</option>
-              <option value="30" selected>30 years</option>
-              <option value="35">35 years</option>
-            </select>
+          <div class="card">
+            <fieldset>
+              <legend>Property B</legend>
+              <div class="form-group">
+                <label for="cmp-b-price">Price (£) <span class="required" aria-label="required">*</span></label>
+                <input type="number" id="cmp-b-price" min="1" step="1000" required placeholder="e.g. 400,000" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="cmp-b-deposit">Deposit (£)</label>
+                <input type="number" id="cmp-b-deposit" min="0" step="1000" value="0" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="cmp-b-rate">Rate (%)</label>
+                <input type="number" id="cmp-b-rate" min="0" max="15" step="0.1" value="5.5" inputmode="decimal">
+              </div>
+              <div class="form-group">
+                <label for="cmp-b-term">Term</label>
+                <select id="cmp-b-term">
+                  <option value="15">15 years</option>
+                  <option value="20">20 years</option>
+                  <option value="25">25 years</option>
+                  <option value="30" selected>30 years</option>
+                  <option value="35">35 years</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="cmp-b-service">Service Charge (£/mo)</label>
+                <input type="number" id="cmp-b-service" min="0" step="10" value="0" inputmode="numeric">
+              </div>
+              <div class="form-group">
+                <label for="cmp-b-ground">Ground Rent (£/mo)</label>
+                <input type="number" id="cmp-b-ground" min="0" step="10" value="0" inputmode="numeric">
+              </div>
+            </fieldset>
           </div>
         </div>
 
-        <div class="form-group checkbox-group">
-          <input type="checkbox" id="first-time-buyer" name="first-time-buyer" checked>
-          <label for="first-time-buyer">I am a first-time buyer</label>
+        <div class="card compare-salary-card">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cmp-salary">Your Annual Salary (£) <span class="required" aria-label="required">*</span></label>
+              <input type="number" id="cmp-salary" min="1" step="100" required placeholder="e.g. 35,000" inputmode="numeric">
+            </div>
+            <div class="form-group checkbox-group">
+              <input type="checkbox" id="cmp-ftb" checked>
+              <label for="cmp-ftb">First-time buyer</label>
+            </div>
+          </div>
         </div>
-      </fieldset>
 
-      <button type="submit" class="btn-calculate">Calculate</button>
-    </form>
+        <button type="submit" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Compare Properties
+        </button>
+      </form>
 
-    <section id="results" hidden aria-live="polite"></section>
+      <section id="compare-results" hidden aria-live="polite"></section>
+    </section>
   </main>
 
-  <footer>
+  <footer class="site-footer">
     <p class="disclaimer">This tool is for informational purposes only and does not constitute financial advice. Calculations are estimates based on publicly available data. Consult a qualified mortgage adviser before making financial decisions.</p>
-    <p class="tax-year">Based on 2025–26 UK tax year</p>
+    <p class="tax-year">Based on 2025–26 UK tax year &middot; Borough data last updated Q4 2025</p>
   </footer>
 
   <script type="module" src="js/ui.js"></script>

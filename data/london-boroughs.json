@@ -1,0 +1,201 @@
+{
+  "lastUpdated": "2025-Q4",
+  "source": "ONS / HM Land Registry — UK House Price Index",
+  "boroughs": [
+    {
+      "name": "Barking and Dagenham",
+      "zone": "5–6",
+      "prices": {
+        "flat": { "avg": 215000, "1bed": 175000, "2bed": 225000, "3bed": 265000, "4bed": null },
+        "terraced": { "avg": 340000, "1bed": null, "2bed": 310000, "3bed": 350000, "4bed": 400000 },
+        "semi": { "avg": 385000, "1bed": null, "2bed": 350000, "3bed": 395000, "4bed": 450000 },
+        "detached": { "avg": 475000, "1bed": null, "2bed": null, "3bed": 460000, "4bed": 520000 }
+      },
+      "pricePerSqft": 370,
+      "change1yr": 2.1,
+      "change5yr": 15.8
+    },
+    {
+      "name": "Bexley",
+      "zone": "5–6",
+      "prices": {
+        "flat": { "avg": 225000, "1bed": 185000, "2bed": 235000, "3bed": 275000, "4bed": null },
+        "terraced": { "avg": 360000, "1bed": null, "2bed": 330000, "3bed": 370000, "4bed": 420000 },
+        "semi": { "avg": 410000, "1bed": null, "2bed": 370000, "3bed": 420000, "4bed": 480000 },
+        "detached": { "avg": 550000, "1bed": null, "2bed": null, "3bed": 510000, "4bed": 600000 }
+      },
+      "pricePerSqft": 385,
+      "change1yr": 1.8,
+      "change5yr": 14.2
+    },
+    {
+      "name": "Croydon",
+      "zone": "5–6",
+      "prices": {
+        "flat": { "avg": 245000, "1bed": 200000, "2bed": 255000, "3bed": 300000, "4bed": null },
+        "terraced": { "avg": 380000, "1bed": null, "2bed": 345000, "3bed": 390000, "4bed": 445000 },
+        "semi": { "avg": 430000, "1bed": null, "2bed": 395000, "3bed": 440000, "4bed": 510000 },
+        "detached": { "avg": 600000, "1bed": null, "2bed": null, "3bed": 565000, "4bed": 650000 }
+      },
+      "pricePerSqft": 400,
+      "change1yr": 1.5,
+      "change5yr": 12.3
+    },
+    {
+      "name": "Greenwich",
+      "zone": "2–4",
+      "prices": {
+        "flat": { "avg": 310000, "1bed": 260000, "2bed": 325000, "3bed": 380000, "4bed": null },
+        "terraced": { "avg": 450000, "1bed": null, "2bed": 415000, "3bed": 465000, "4bed": 530000 },
+        "semi": { "avg": 520000, "1bed": null, "2bed": 480000, "3bed": 530000, "4bed": 600000 },
+        "detached": { "avg": 700000, "1bed": null, "2bed": null, "3bed": 660000, "4bed": 760000 }
+      },
+      "pricePerSqft": 480,
+      "change1yr": 2.5,
+      "change5yr": 18.1
+    },
+    {
+      "name": "Hackney",
+      "zone": "2",
+      "prices": {
+        "flat": { "avg": 420000, "1bed": 350000, "2bed": 440000, "3bed": 520000, "4bed": null },
+        "terraced": { "avg": 750000, "1bed": null, "2bed": 680000, "3bed": 780000, "4bed": 900000 },
+        "semi": { "avg": 850000, "1bed": null, "2bed": null, "3bed": 870000, "4bed": 980000 },
+        "detached": { "avg": 1100000, "1bed": null, "2bed": null, "3bed": 1050000, "4bed": 1200000 }
+      },
+      "pricePerSqft": 650,
+      "change1yr": 1.2,
+      "change5yr": 10.5
+    },
+    {
+      "name": "Hounslow",
+      "zone": "4–5",
+      "prices": {
+        "flat": { "avg": 285000, "1bed": 235000, "2bed": 300000, "3bed": 350000, "4bed": null },
+        "terraced": { "avg": 420000, "1bed": null, "2bed": 385000, "3bed": 435000, "4bed": 495000 },
+        "semi": { "avg": 490000, "1bed": null, "2bed": 450000, "3bed": 500000, "4bed": 570000 },
+        "detached": { "avg": 680000, "1bed": null, "2bed": null, "3bed": 640000, "4bed": 740000 }
+      },
+      "pricePerSqft": 450,
+      "change1yr": 1.9,
+      "change5yr": 16.4
+    },
+    {
+      "name": "Lewisham",
+      "zone": "2–3",
+      "prices": {
+        "flat": { "avg": 300000, "1bed": 250000, "2bed": 315000, "3bed": 370000, "4bed": null },
+        "terraced": { "avg": 480000, "1bed": null, "2bed": 440000, "3bed": 495000, "4bed": 565000 },
+        "semi": { "avg": 550000, "1bed": null, "2bed": 510000, "3bed": 565000, "4bed": 640000 },
+        "detached": { "avg": 750000, "1bed": null, "2bed": null, "3bed": 710000, "4bed": 810000 }
+      },
+      "pricePerSqft": 500,
+      "change1yr": 2.3,
+      "change5yr": 17.6
+    },
+    {
+      "name": "Newham",
+      "zone": "3",
+      "prices": {
+        "flat": { "avg": 290000, "1bed": 240000, "2bed": 305000, "3bed": 355000, "4bed": null },
+        "terraced": { "avg": 430000, "1bed": null, "2bed": 395000, "3bed": 445000, "4bed": 505000 },
+        "semi": { "avg": 500000, "1bed": null, "2bed": 460000, "3bed": 510000, "4bed": 580000 },
+        "detached": { "avg": 640000, "1bed": null, "2bed": null, "3bed": 600000, "4bed": 700000 }
+      },
+      "pricePerSqft": 460,
+      "change1yr": 3.1,
+      "change5yr": 22.4
+    },
+    {
+      "name": "Southwark",
+      "zone": "1–2",
+      "prices": {
+        "flat": { "avg": 410000, "1bed": 345000, "2bed": 430000, "3bed": 510000, "4bed": null },
+        "terraced": { "avg": 680000, "1bed": null, "2bed": 620000, "3bed": 710000, "4bed": 820000 },
+        "semi": { "avg": 780000, "1bed": null, "2bed": null, "3bed": 800000, "4bed": 900000 },
+        "detached": { "avg": 1050000, "1bed": null, "2bed": null, "3bed": 1000000, "4bed": 1150000 }
+      },
+      "pricePerSqft": 620,
+      "change1yr": 1.0,
+      "change5yr": 8.9
+    },
+    {
+      "name": "Tower Hamlets",
+      "zone": "1–2",
+      "prices": {
+        "flat": { "avg": 400000, "1bed": 330000, "2bed": 420000, "3bed": 500000, "4bed": null },
+        "terraced": { "avg": 620000, "1bed": null, "2bed": 570000, "3bed": 650000, "4bed": 750000 },
+        "semi": { "avg": 700000, "1bed": null, "2bed": null, "3bed": 720000, "4bed": 820000 },
+        "detached": { "avg": 950000, "1bed": null, "2bed": null, "3bed": 900000, "4bed": 1050000 }
+      },
+      "pricePerSqft": 600,
+      "change1yr": 0.8,
+      "change5yr": 7.2
+    },
+    {
+      "name": "Waltham Forest",
+      "zone": "3–4",
+      "prices": {
+        "flat": { "avg": 310000, "1bed": 255000, "2bed": 325000, "3bed": 380000, "4bed": null },
+        "terraced": { "avg": 490000, "1bed": null, "2bed": 450000, "3bed": 505000, "4bed": 575000 },
+        "semi": { "avg": 560000, "1bed": null, "2bed": 520000, "3bed": 575000, "4bed": 650000 },
+        "detached": { "avg": 720000, "1bed": null, "2bed": null, "3bed": 680000, "4bed": 780000 }
+      },
+      "pricePerSqft": 510,
+      "change1yr": 2.7,
+      "change5yr": 19.3
+    },
+    {
+      "name": "Lambeth",
+      "zone": "2–3",
+      "prices": {
+        "flat": { "avg": 390000, "1bed": 325000, "2bed": 410000, "3bed": 485000, "4bed": null },
+        "terraced": { "avg": 680000, "1bed": null, "2bed": 625000, "3bed": 710000, "4bed": 810000 },
+        "semi": { "avg": 770000, "1bed": null, "2bed": null, "3bed": 790000, "4bed": 890000 },
+        "detached": { "avg": 1000000, "1bed": null, "2bed": null, "3bed": 960000, "4bed": 1100000 }
+      },
+      "pricePerSqft": 610,
+      "change1yr": 0.9,
+      "change5yr": 9.8
+    },
+    {
+      "name": "Camden",
+      "zone": "1–2",
+      "prices": {
+        "flat": { "avg": 550000, "1bed": 450000, "2bed": 580000, "3bed": 700000, "4bed": null },
+        "terraced": { "avg": 1100000, "1bed": null, "2bed": 950000, "3bed": 1150000, "4bed": 1350000 },
+        "semi": { "avg": 1400000, "1bed": null, "2bed": null, "3bed": 1350000, "4bed": 1550000 },
+        "detached": { "avg": 2000000, "1bed": null, "2bed": null, "3bed": 1850000, "4bed": 2200000 }
+      },
+      "pricePerSqft": 850,
+      "change1yr": 0.5,
+      "change5yr": 6.1
+    },
+    {
+      "name": "Islington",
+      "zone": "1–2",
+      "prices": {
+        "flat": { "avg": 500000, "1bed": 410000, "2bed": 525000, "3bed": 640000, "4bed": null },
+        "terraced": { "avg": 1000000, "1bed": null, "2bed": 880000, "3bed": 1050000, "4bed": 1250000 },
+        "semi": { "avg": 1300000, "1bed": null, "2bed": null, "3bed": 1250000, "4bed": 1450000 },
+        "detached": { "avg": 1800000, "1bed": null, "2bed": null, "3bed": 1700000, "4bed": 2000000 }
+      },
+      "pricePerSqft": 800,
+      "change1yr": 0.6,
+      "change5yr": 7.5
+    },
+    {
+      "name": "Westminster",
+      "zone": "1",
+      "prices": {
+        "flat": { "avg": 700000, "1bed": 550000, "2bed": 750000, "3bed": 950000, "4bed": 1300000 },
+        "terraced": { "avg": 2000000, "1bed": null, "2bed": 1600000, "3bed": 2100000, "4bed": 2600000 },
+        "semi": { "avg": 2800000, "1bed": null, "2bed": null, "3bed": 2600000, "4bed": 3200000 },
+        "detached": { "avg": 4500000, "1bed": null, "2bed": null, "3bed": 4000000, "4bed": 5200000 }
+      },
+      "pricePerSqft": 1350,
+      "change1yr": -0.3,
+      "change5yr": 3.2
+    }
+  ]
+}
