@@ -15,6 +15,8 @@
 </head>
 <body>
 
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <header class="site-header">
     <div class="header-inner">
       <div class="logo">
@@ -55,7 +57,7 @@
     </div>
   </div>
 
-  <main>
+  <main id="main-content">
     <!-- ===== AFFORDABILITY TAB ===== -->
     <section id="tab-affordability" role="tabpanel" aria-labelledby="btn-affordability" class="tab-panel active">
       <form id="affordability-form" novalidate>
@@ -293,7 +295,7 @@
 
             <div class="form-group">
               <label for="area-comfort">Max % of income on housing: <span id="area-comfort-value">35%</span></label>
-              <input type="range" id="area-comfort" min="20" max="60" value="35" step="5">
+              <input type="range" id="area-comfort" min="20" max="60" value="35" step="5" class="has-fill" style="--fill: 37.5%" aria-label="Maximum percentage of income on housing">
             </div>
           </fieldset>
         </div>

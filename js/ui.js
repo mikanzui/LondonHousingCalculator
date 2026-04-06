@@ -95,6 +95,11 @@ function switchTab(tabId) {
     const show = p.id === `tab-${tabId}`;
     p.hidden = !show;
     p.classList.toggle('active', show);
+    // Focus management — move focus to new panel for accessibility
+    if (show) {
+      p.setAttribute('tabindex', '-1');
+      p.focus({ preventScroll: true });
+    }
   });
 }
 
@@ -156,6 +161,68 @@ function riskBadgeHTML(rating) {
   const { label, cls } = map[rating];
   return `<span class="risk-badge ${cls}" role="status">${label}</span>`;
 }
+
+// Apply success pulse to a results container
+function pulseResults(el) {
+  el.classList.remove('results-pulse');
+  // Force reflow to restart animation
+  void el.offsetWidth;
+  el.classList.add('results-pulse');
+}
+
+// Update range slider fill track
+function updateRangeFill(rangeEl) {
+  const min = parseFloat(rangeEl.min) || 0;
+  const max = parseFloat(rangeEl.max) || 100;
+  const val = parseFloat(rangeEl.value) || 0;
+  const pct = ((val - min) / (max - min)) * 100;
+  rangeEl.style.setProperty('--fill', pct + '%');
+}
+
+// Set stagger index on result cards for scalable animation
+function applyStaggerIndex(container) {
+  container.querySelectorAll('.result-card').forEach((card, i) => {
+    card.style.setProperty('--i', i);
+  });
+}
+
+// ============================================================
+//  Live Inline Validation (blur-based — Feedback Patterns)
+// ============================================================
+function addBlurValidation(id, check) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('blur', () => {
+    const val = parseFloat(el.value);
+    const msg = check(val);
+    if (msg) showError(el, msg);
+    else clearError(el);
+  });
+}
+
+// Affordability tab — live validation
+addBlurValidation('salary', v => (v <= 0 || isNaN(v)) ? 'Salary must be greater than 0' : null);
+addBlurValidation('property-price', v => (v <= 0 || isNaN(v)) ? 'Property price must be greater than 0' : null);
+addBlurValidation('deposit', v => (v < 0 || isNaN(v)) ? 'Deposit must be 0 or more' : null);
+addBlurValidation('interest-rate', v => (v < 0 || v > 15 || isNaN(v)) ? 'Rate must be 0–15%' : null);
+
+// Deposit tab — live validation
+addBlurValidation('dep-monthly-contribution', v => (v <= 0 || isNaN(v)) ? 'Enter a monthly savings amount' : null);
+addBlurValidation('dep-target', v => (v <= 0 || isNaN(v)) ? 'Enter a deposit target' : null);
+
+// Area finder tab — live validation
+addBlurValidation('area-salary', v => (v <= 0 || isNaN(v)) ? 'Enter your salary' : null);
+
+// Compare tab — live validation
+addBlurValidation('cmp-salary', v => (v <= 0 || isNaN(v)) ? 'Enter your salary' : null);
+addBlurValidation('cmp-a-price', v => (v <= 0 || isNaN(v)) ? 'Enter price' : null);
+addBlurValidation('cmp-b-price', v => (v <= 0 || isNaN(v)) ? 'Enter price' : null);
+
+// Range slider fill initialization + live update
+document.querySelectorAll('input[type="range"].has-fill').forEach(r => {
+  updateRangeFill(r);
+  r.addEventListener('input', () => updateRangeFill(r));
+});
 
 // ============================================================
 //  1. AFFORDABILITY TAB
@@ -241,7 +308,11 @@ function renderAff(d) {
       </tbody></table>
     </details>`;
   affResults.hidden = false;
+  applyStaggerIndex(affResults);
+  pulseResults(affResults);
   affResults.scrollIntoView({ behavior: 'smooth' });
+  affResults.setAttribute('tabindex', '-1');
+  affResults.focus({ preventScroll: true });
 }
 
 affForm.addEventListener('submit', (e) => {
@@ -323,6 +394,8 @@ depForm.addEventListener('submit', (e) => {
 
   depResults.innerHTML = html;
   depResults.hidden = false;
+  applyStaggerIndex(depResults);
+  pulseResults(depResults);
 
   // Chart
   renderDepositChart(proj.timeline, useLisa, target);
@@ -336,12 +409,12 @@ function renderDepositChart(timeline, useLisa, target) {
 
   const labels = timeline.map(y => `Year ${y.year}`);
   const datasets = [
-    { label: 'Total Saved', data: timeline.map(y => Math.round(y.total)), borderColor: '#6c5ce7', backgroundColor: 'rgba(108,92,231,0.1)', fill: true, tension: 0.3 },
+    { label: 'Total Saved', data: timeline.map(y => Math.round(y.total)), borderColor: '#6c5ce7', backgroundColor: 'rgba(108,92,231,0.15)', fill: true, tension: 0.3, pointRadius: 4, pointHoverRadius: 6 },
   ];
   if (useLisa) {
     const cumBonus = []; let sum = 0;
     for (const y of timeline) { sum += y.lisaBonus; cumBonus.push(Math.round(sum)); }
-    datasets.push({ label: 'LISA Bonus (cumulative)', data: cumBonus, borderColor: '#00b894', backgroundColor: 'rgba(0,184,148,0.1)', fill: true, tension: 0.3 });
+    datasets.push({ label: 'LISA Bonus (cumulative)', data: cumBonus, borderColor: '#00b894', backgroundColor: 'rgba(0,184,148,0.15)', fill: true, tension: 0.3, borderDash: [6, 3], pointRadius: 4, pointHoverRadius: 6, pointStyle: 'rect' });
   }
 
   depChart = new Chart(ctx, {
@@ -351,10 +424,30 @@ function renderDepositChart(timeline, useLisa, target) {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'bottom', labels: { font: { family: 'Inter' } } },
+        legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 12 }, usePointStyle: true, padding: 16 } },
+        tooltip: {
+          callbacks: {
+            label: (item) => `${item.dataset.label}: £${item.parsed.y.toLocaleString('en-GB')}`,
+          },
+          backgroundColor: '#252538',
+          titleColor: '#e0e0ee',
+          bodyColor: '#e0e0ee',
+          borderColor: 'rgba(108,92,231,0.3)',
+          borderWidth: 1,
+          cornerRadius: 8,
+          padding: 10,
+        },
       },
       scales: {
-        y: { beginAtZero: true, ticks: { callback: v => '£' + (v / 1000).toFixed(0) + 'k' } },
+        y: {
+          beginAtZero: true,
+          ticks: { callback: v => '£' + (v / 1000).toFixed(0) + 'k', color: '#9a9ab0', font: { family: 'Inter' } },
+          grid: { color: 'rgba(255,255,255,0.04)' },
+        },
+        x: {
+          ticks: { color: '#9a9ab0', font: { family: 'Inter' } },
+          grid: { color: 'rgba(255,255,255,0.04)' },
+        },
       },
     },
   });
@@ -370,13 +463,21 @@ let boroughData = null;
 // Comfort slider live update
 const comfortSlider = document.getElementById('area-comfort');
 const comfortValue = document.getElementById('area-comfort-value');
-comfortSlider.addEventListener('input', () => { comfortValue.textContent = comfortSlider.value + '%'; });
+comfortSlider.addEventListener('input', () => {
+  comfortValue.textContent = comfortSlider.value + '%';
+  updateRangeFill(comfortSlider);
+});
 
 async function loadBoroughData() {
   if (boroughData) return boroughData;
-  const resp = await fetch('data/london-boroughs.json');
-  boroughData = await resp.json();
-  return boroughData;
+  try {
+    const resp = await fetch('data/london-boroughs.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    boroughData = await resp.json();
+    return boroughData;
+  } catch (err) {
+    throw new Error('Could not load borough data. Check your connection and try again.');
+  }
 }
 
 areaForm.addEventListener('submit', async (e) => {
@@ -393,7 +494,21 @@ areaForm.addEventListener('submit', async (e) => {
 
   if (salary <= 0) { showError(document.getElementById('area-salary'), 'Enter your salary'); return; }
 
-  const boroughs = await loadBoroughData();
+  // Loading state
+  areaResults.innerHTML = `<div class="skeleton" style="width:60%;height:1.5rem;margin-bottom:var(--space-sm)"></div><div class="skeleton" style="width:100%;height:6rem"></div>`;
+  areaResults.hidden = false;
+
+  let boroughs;
+  try {
+    boroughs = await loadBoroughData();
+  } catch (err) {
+    areaResults.innerHTML = `<div class="empty-state">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p>${err.message}</p>
+      <button type="button" class="btn-primary" onclick="this.closest('form').requestSubmit()" style="width:auto;padding:0.5rem 1.5rem">Retry</button>
+    </div>`;
+    return;
+  }
   const maxAffordablePrice = salary * multiple + deposit;
 
   // Pre-compute net monthly income for affordability %
@@ -416,14 +531,18 @@ areaForm.addEventListener('submit', async (e) => {
   html += `<p class="result-note" style="margin-bottom:0.5rem">Budget: ${fmtInt(maxAffordablePrice)} (${multiple}× salary + deposit) · Max ${maxPct}% of income on housing</p>`;
 
   if (ranked.length === 0) {
-    html += `<p style="padding:1rem; text-align:center; color:var(--clr-text-muted)">No boroughs match your criteria. Try increasing your budget or comfort level.</p>`;
+    html += `<div class="empty-state">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <p>No boroughs match your criteria.</p>
+      <p>Try increasing your budget, raising the comfort level to ${Math.min(maxPct + 10, 60)}%, or selecting a different property type.</p>
+    </div>`;
   } else {
     // Map property type for Rightmove
     const rmType = propType === 'any' ? '' : propType;
     const rmBeds = beds === 'any' ? '' : beds.replace('bed', '');
 
     html += `<div style="overflow-x:auto"><table class="borough-table"><thead><tr>`;
-    html += `<th>Borough</th><th class="text-right">Avg Price</th><th class="text-right">Monthly</th><th class="text-right">% Income</th><th class="text-right">5yr Change</th><th>Rating</th><th></th>`;
+    html += `<th scope="col">Borough</th><th scope="col" class="text-right">Avg Price</th><th scope="col" class="text-right">Monthly</th><th scope="col" class="text-right">% Income</th><th scope="col" class="text-right">5yr Change</th><th scope="col">Rating</th><th scope="col"></th>`;
     html += `</tr></thead><tbody>`;
     for (const b of ranked) {
       const cls = b.riskRating === 'safe' ? 'borough-affordable' : b.riskRating === 'stretch' ? 'borough-stretch' : 'borough-unaffordable';
@@ -446,7 +565,10 @@ areaForm.addEventListener('submit', async (e) => {
 
   areaResults.innerHTML = html;
   areaResults.hidden = false;
+  pulseResults(areaResults);
   areaResults.scrollIntoView({ behavior: 'smooth' });
+  areaResults.setAttribute('tabindex', '-1');
+  areaResults.focus({ preventScroll: true });
 });
 
 // ============================================================
@@ -520,7 +642,7 @@ cmpForm.addEventListener('submit', (e) => {
   ];
 
   let html = `<h2 class="results-title">Comparison</h2>`;
-  html += `<div style="overflow-x:auto"><table class="compare-table"><thead><tr><th></th><th>Property A</th><th>Property B</th></tr></thead><tbody>`;
+  html += `<div style="overflow-x:auto"><table class="compare-table"><thead><tr><th scope="col"></th><th scope="col">Property A</th><th scope="col">Property B</th></tr></thead><tbody>`;
   for (const [label, va, vb, [clsA, clsB]] of rows) {
     html += `<tr><td>${label}</td><td${clsA}>${va}</td><td${clsB}>${vb}</td></tr>`;
   }
@@ -533,5 +655,9 @@ cmpForm.addEventListener('submit', (e) => {
 
   cmpResults.innerHTML = html;
   cmpResults.hidden = false;
+  applyStaggerIndex(cmpResults);
+  pulseResults(cmpResults);
   cmpResults.scrollIntoView({ behavior: 'smooth' });
+  cmpResults.setAttribute('tabindex', '-1');
+  cmpResults.focus({ preventScroll: true });
 });
