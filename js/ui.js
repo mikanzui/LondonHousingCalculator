@@ -1,6 +1,7 @@
 /**
  * UI Module — all DOM interaction for the London Housing Calculator.
  * This is the only module that touches the DOM.
+ * v4: Scroll layout, dock navigation, IntersectionObserver reveals.
  */
 
 import {
@@ -36,7 +37,7 @@ const appState = {
 function updateAppState(data) {
   Object.assign(appState, data);
   updateProfileBar();
-  autoFillTabs();
+  autoFillSections();
 }
 
 // Profile bar
@@ -50,27 +51,23 @@ function updateProfileBar() {
   document.getElementById('pb-term').textContent = `${appState.mortgageTerm}yr term`;
 }
 
-// Auto-fill other tabs from shared state
-function autoFillTabs() {
-  // Deposit tab
+// Auto-fill other sections from shared state
+function autoFillSections() {
   const depTarget = document.getElementById('dep-target');
   const depPropPrice = document.getElementById('dep-property-price');
   if (depTarget && !depTarget.value) depTarget.value = appState.deposit + appState.additionalFunds || '';
   if (depPropPrice && !depPropPrice.value && appState.propertyPrice) depPropPrice.value = appState.propertyPrice;
 
-  // Area finder tab
   const areaSalary = document.getElementById('area-salary');
   const areaDeposit = document.getElementById('area-deposit');
   if (areaSalary && !areaSalary.value) areaSalary.value = appState.salary || '';
   if (areaDeposit && !areaDeposit.value) areaDeposit.value = appState.deposit + appState.additionalFunds || '';
 
-  // Compare tab
   const cmpSalary = document.getElementById('cmp-salary');
   const cmpFtb = document.getElementById('cmp-ftb');
   if (cmpSalary && !cmpSalary.value) cmpSalary.value = appState.salary || '';
   if (cmpFtb) cmpFtb.checked = appState.isFirstTimeBuyer;
 
-  // Compare property A defaults
   const cmpADeposit = document.getElementById('cmp-a-deposit');
   const cmpARate = document.getElementById('cmp-a-rate');
   const cmpBRate = document.getElementById('cmp-b-rate');
@@ -80,46 +77,58 @@ function autoFillTabs() {
 }
 
 // ============================================================
-//  Tabs
+//  Dock Navigation + Scroll
 // ============================================================
-const tabBtns = document.querySelectorAll('.tab-btn');
-const tabPanels = document.querySelectorAll('.tab-panel');
+const dockItems = document.querySelectorAll('.dock-item');
+const sections = document.querySelectorAll('.calc-section, .faq-section');
 
-function switchTab(tabId) {
-  tabBtns.forEach(b => {
-    const selected = b.dataset.tab === tabId;
-    b.classList.toggle('active', selected);
-    b.setAttribute('aria-selected', String(selected));
+// Smooth scroll on dock click
+dockItems.forEach(item => {
+  item.addEventListener('click', () => {
+    const id = item.dataset.section;
+    const target = document.getElementById(id);
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
   });
-  tabPanels.forEach(p => {
-    const show = p.id === `tab-${tabId}`;
-    p.hidden = !show;
-    p.classList.toggle('active', show);
-    // Focus management — move focus to new panel for accessibility
-    if (show) {
-      p.setAttribute('tabindex', '-1');
-      p.focus({ preventScroll: true });
+});
+
+// Track active section with IntersectionObserver
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      dockItems.forEach(item => {
+        item.classList.toggle('active', item.dataset.section === id);
+      });
     }
   });
+}, { threshold: 0.3 });
+
+sections.forEach(s => sectionObserver.observe(s));
+
+// ============================================================
+//  Scroll Reveal (IntersectionObserver)
+// ============================================================
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.reveal-section').forEach(s => revealObserver.observe(s));
+
+// ============================================================
+//  Dock Clock
+// ============================================================
+const clockEl = document.querySelector('.dock-clock');
+function updateClock() {
+  const now = new Date();
+  clockEl.textContent = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 }
-
-tabBtns.forEach(btn => {
-  btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-});
-
-// Keyboard arrow navigation on tab bar
-document.querySelector('.tab-bar').addEventListener('keydown', (e) => {
-  const btns = [...tabBtns];
-  const idx = btns.indexOf(document.activeElement);
-  if (idx === -1) return;
-  let next = idx;
-  if (e.key === 'ArrowRight') next = (idx + 1) % btns.length;
-  else if (e.key === 'ArrowLeft') next = (idx - 1 + btns.length) % btns.length;
-  else return;
-  e.preventDefault();
-  btns[next].focus();
-  btns[next].click();
-});
+updateClock();
+setInterval(updateClock, 60000);
 
 // ============================================================
 //  Helpers
@@ -429,9 +438,9 @@ function renderDepositChart(timeline, useLisa, target) {
           callbacks: {
             label: (item) => `${item.dataset.label}: £${item.parsed.y.toLocaleString('en-GB')}`,
           },
-          backgroundColor: '#252538',
-          titleColor: '#e0e0ee',
-          bodyColor: '#e0e0ee',
+          backgroundColor: 'rgba(30,30,30,0.95)',
+          titleColor: '#ffffff',
+          bodyColor: '#ffffff',
           borderColor: 'rgba(108,92,231,0.3)',
           borderWidth: 1,
           cornerRadius: 8,
@@ -441,11 +450,11 @@ function renderDepositChart(timeline, useLisa, target) {
       scales: {
         y: {
           beginAtZero: true,
-          ticks: { callback: v => '£' + (v / 1000).toFixed(0) + 'k', color: '#9a9ab0', font: { family: 'Inter' } },
+          ticks: { callback: v => '£' + (v / 1000).toFixed(0) + 'k', color: '#888888', font: { family: 'Inter' } },
           grid: { color: 'rgba(255,255,255,0.04)' },
         },
         x: {
-          ticks: { color: '#9a9ab0', font: { family: 'Inter' } },
+          ticks: { color: '#888888', font: { family: 'Inter' } },
           grid: { color: 'rgba(255,255,255,0.04)' },
         },
       },

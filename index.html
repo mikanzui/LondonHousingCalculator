@@ -17,35 +17,29 @@
 
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <header class="site-header">
-    <div class="header-inner">
-      <div class="logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <h1>London Housing Calculator</h1>
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-badge">2025–26 UK Tax Year</div>
+      <h1 class="hero-title">
+        <span class="hero-muted">London Housing</span>
+        <span class="hero-bold">Calculator</span>
+      </h1>
+      <p class="hero-subtitle">Realistic affordability for real London buyers</p>
+      <div class="hero-features">
+        <span class="hero-feature">Mortgage</span>
+        <span class="hero-dot"></span>
+        <span class="hero-feature">Tax</span>
+        <span class="hero-dot"></span>
+        <span class="hero-feature">Stamp Duty</span>
+        <span class="hero-dot"></span>
+        <span class="hero-feature">Boroughs</span>
       </div>
-      <p class="tagline">Realistic affordability for real London buyers</p>
     </div>
-  </header>
-
-  <!-- Tab Navigation -->
-  <nav class="tab-bar" role="tablist" aria-label="Calculator sections">
-    <button role="tab" aria-selected="true" aria-controls="tab-affordability" id="btn-affordability" class="tab-btn active" data-tab="affordability">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-      <span>Affordability</span>
-    </button>
-    <button role="tab" aria-selected="false" aria-controls="tab-deposit" id="btn-deposit" class="tab-btn" data-tab="deposit">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg>
-      <span>Deposit</span>
-    </button>
-    <button role="tab" aria-selected="false" aria-controls="tab-area" id="btn-area" class="tab-btn" data-tab="area">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <span>Areas</span>
-    </button>
-    <button role="tab" aria-selected="false" aria-controls="tab-compare" id="btn-compare" class="tab-btn" data-tab="compare">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      <span>Compare</span>
-    </button>
-  </nav>
+    <div class="scroll-indicator" aria-hidden="true">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </section>
 
   <!-- Profile Summary Bar -->
   <div id="profile-bar" class="profile-bar" hidden>
@@ -58,8 +52,18 @@
   </div>
 
   <main id="main-content">
-    <!-- ===== AFFORDABILITY TAB ===== -->
-    <section id="tab-affordability" role="tabpanel" aria-labelledby="btn-affordability" class="tab-panel active">
+    <!-- ===== AFFORDABILITY SECTION ===== -->
+    <section id="affordability" class="calc-section reveal-section">
+      <div class="window-chrome">
+        <div class="window-titlebar">
+          <div class="window-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <span class="window-title">affordability.app</span>
+        </div>
+        <div class="window-body">
       <form id="affordability-form" novalidate>
         <div class="card">
           <fieldset>
@@ -160,10 +164,22 @@
       </form>
 
       <section id="results" hidden aria-live="polite"></section>
+        </div>
+      </div>
     </section>
 
-    <!-- ===== DEPOSIT TAB ===== -->
-    <section id="tab-deposit" role="tabpanel" aria-labelledby="btn-deposit" class="tab-panel" hidden>
+    <!-- ===== DEPOSIT SECTION ===== -->
+    <section id="deposit" class="calc-section reveal-section">
+      <div class="window-chrome">
+        <div class="window-titlebar">
+          <div class="window-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <span class="window-title">deposit.app</span>
+        </div>
+        <div class="window-body">
       <form id="deposit-form" novalidate>
         <div class="card">
           <fieldset>
@@ -227,10 +243,22 @@
       <div id="deposit-chart-container" class="chart-container" hidden>
         <canvas id="deposit-chart" aria-label="Deposit savings projection chart"></canvas>
       </div>
+        </div>
+      </div>
     </section>
 
-    <!-- ===== AREA FINDER TAB ===== -->
-    <section id="tab-area" role="tabpanel" aria-labelledby="btn-area" class="tab-panel" hidden>
+    <!-- ===== AREA FINDER SECTION ===== -->
+    <section id="area" class="calc-section reveal-section">
+      <div class="window-chrome">
+        <div class="window-titlebar">
+          <div class="window-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <span class="window-title">boroughs.app</span>
+        </div>
+        <div class="window-body">
       <form id="area-form" novalidate>
         <div class="card">
           <fieldset>
@@ -307,10 +335,22 @@
       </form>
 
       <section id="area-results" hidden aria-live="polite"></section>
+        </div>
+      </div>
     </section>
 
-    <!-- ===== COMPARE TAB ===== -->
-    <section id="tab-compare" role="tabpanel" aria-labelledby="btn-compare" class="tab-panel" hidden>
+    <!-- ===== COMPARE SECTION ===== -->
+    <section id="compare" class="calc-section reveal-section">
+      <div class="window-chrome">
+        <div class="window-titlebar">
+          <div class="window-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <span class="window-title">compare.app</span>
+        </div>
+        <div class="window-body">
       <form id="compare-form" novalidate>
         <div class="compare-grid">
           <div class="card">
@@ -406,13 +446,145 @@
       </form>
 
       <section id="compare-results" hidden aria-live="polite"></section>
+        </div>
+      </div>
     </section>
+
+    <!-- ===== FAQ SECTION ===== -->
+    <section id="faq" class="faq-section reveal-section">
+      <h2 class="section-heading"><span class="heading-muted">Housing</span> <span class="heading-bold">FAQ</span></h2>
+
+      <div class="mail-thread">
+        <div class="mail-message">
+          <div class="mail-header">
+            <span class="mail-from">London Housing Calculator</span>
+            <span class="mail-to">To: You</span>
+          </div>
+          <div class="mail-subject">What is stamp duty for first-time buyers?</div>
+          <div class="mail-body">
+            <p>First-time buyers in England pay no stamp duty on the first £425,000 of a property priced up to £625,000. Above £425,000 (up to £625,000), you pay 5%. If the property exceeds £625,000, standard rates apply — starting at 0% on the first £250,000, then 5% up to £925,000, and higher above that. This relief saves most London FTBs between £6,000–£11,000.</p>
+          </div>
+          <div class="mail-footer">Sent from London Housing Calculator</div>
+        </div>
+
+        <div class="mail-message">
+          <div class="mail-header">
+            <span class="mail-from">London Housing Calculator</span>
+            <span class="mail-to">To: You</span>
+          </div>
+          <div class="mail-subject">How much deposit do I actually need?</div>
+          <div class="mail-body">
+            <p>Most lenders require a minimum 5% deposit, but 10% unlocks significantly better rates. In London, where the average first-time buyer property is around £450,000, that means £22,500–£45,000. A Lifetime ISA can help — you get a 25% government bonus on up to £4,000/year of savings. Remember to also budget for solicitor fees (£1,500–£3,000), surveys, and moving costs.</p>
+          </div>
+          <div class="mail-footer">Sent from London Housing Calculator</div>
+        </div>
+
+        <div class="mail-message">
+          <div class="mail-header">
+            <span class="mail-from">London Housing Calculator</span>
+            <span class="mail-to">To: You</span>
+          </div>
+          <div class="mail-subject">What lending multiple will banks offer me?</div>
+          <div class="mail-body">
+            <p>Most UK lenders offer 4–4.5× your annual salary. Some specialist lenders go to 5× or even 5.5× for high earners or certain professions (doctors, solicitors, accountants). Joint applicants can combine salaries. The calculator uses 4.5× as the standard default but lets you adjust this. Be cautious with higher multiples — they mean larger monthly payments and higher risk if rates rise.</p>
+          </div>
+          <div class="mail-footer">Sent from London Housing Calculator</div>
+        </div>
+
+        <div class="mail-message">
+          <div class="mail-header">
+            <span class="mail-from">London Housing Calculator</span>
+            <span class="mail-to">To: You</span>
+          </div>
+          <div class="mail-subject">Is a Lifetime ISA worth it?</div>
+          <div class="mail-body">
+            <p>Almost always yes for first-time buyers. You get a free 25% bonus — that's up to £1,000/year of free money. The catch: the property must cost £450,000 or less, you must be 18–39 to open one, and if you withdraw for non-property purposes you lose the bonus plus a penalty. In London, the £450k cap is the main limitation, but many flats and some terraced houses in outer boroughs still qualify.</p>
+          </div>
+          <div class="mail-footer">Sent from London Housing Calculator</div>
+        </div>
+
+        <div class="mail-message">
+          <div class="mail-header">
+            <span class="mail-from">London Housing Calculator</span>
+            <span class="mail-to">To: You</span>
+          </div>
+          <div class="mail-subject">What does the affordability percentage mean?</div>
+          <div class="mail-body">
+            <p>It's your monthly mortgage payment as a percentage of your monthly take-home pay. Under 28% is generally considered safe — you'll have plenty left for bills, savings, and life. 28–35% is a stretch but manageable. Over 35% is risky territory where unexpected costs could cause real financial stress. Most financial advisers recommend keeping it under 30%.</p>
+          </div>
+          <div class="mail-footer">Sent from London Housing Calculator</div>
+        </div>
+
+        <div class="mail-message">
+          <div class="mail-header">
+            <span class="mail-from">London Housing Calculator</span>
+            <span class="mail-to">To: You</span>
+          </div>
+          <div class="mail-subject">How accurate is this calculator?</div>
+          <div class="mail-body">
+            <p>The tax calculations use official 2025–26 HMRC rates and thresholds, so your take-home pay estimate should be very close. Mortgage payments use standard amortisation formulas. Borough average prices come from Land Registry data (Q4 2025). What we can't account for: your specific lender's criteria, credit score, existing debts, or variable rate changes. Always get a Decision in Principle from a lender for a definitive answer.</p>
+          </div>
+          <div class="mail-footer">Sent from London Housing Calculator</div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
+  <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
-    <p class="disclaimer">This tool is for informational purposes only and does not constitute financial advice. Calculations are estimates based on publicly available data. Consult a qualified mortgage adviser before making financial decisions.</p>
-    <p class="tax-year">Based on 2025–26 UK tax year &middot; Borough data last updated Q4 2025</p>
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h3 class="footer-heading">Navigate</h3>
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <a href="#affordability">Affordability</a>
+          <a href="#deposit">Deposit</a>
+          <a href="#area">Areas</a>
+          <a href="#compare">Compare</a>
+          <a href="#faq">FAQ</a>
+        </nav>
+      </div>
+      <div class="footer-col">
+        <h3 class="footer-heading">About</h3>
+        <p class="footer-text">This tool is for informational purposes only and does not constitute financial advice. Calculations are estimates based on publicly available data.</p>
+        <p class="footer-text">Consult a qualified mortgage adviser before making financial decisions.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">Based on 2025–26 UK tax year &middot; Borough data last updated Q4 2025</p>
+    </div>
   </footer>
+
+  <!-- ===== DOCK NAVIGATION ===== -->
+  <nav class="dock" aria-label="Section navigation">
+    <button class="dock-item active" data-section="affordability" aria-label="Affordability calculator">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <span class="dock-label">Afford</span>
+      <span class="dock-dot"></span>
+    </button>
+    <button class="dock-item" data-section="deposit" aria-label="Deposit tracker">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="18"/></svg>
+      <span class="dock-label">Deposit</span>
+      <span class="dock-dot"></span>
+    </button>
+    <button class="dock-item" data-section="area" aria-label="Area finder">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span class="dock-label">Areas</span>
+      <span class="dock-dot"></span>
+    </button>
+    <button class="dock-item" data-section="compare" aria-label="Compare properties">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span class="dock-label">Compare</span>
+      <span class="dock-dot"></span>
+    </button>
+    <button class="dock-item" data-section="faq" aria-label="FAQ">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span class="dock-label">FAQ</span>
+      <span class="dock-dot"></span>
+    </button>
+    <div class="dock-divider"></div>
+    <span class="dock-clock" aria-live="off"></span>
+  </nav>
 
   <script type="module" src="js/ui.js"></script>
 </body>
