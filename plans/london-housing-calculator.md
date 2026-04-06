@@ -21,7 +21,7 @@ Durable decisions that apply across all phases:
 
 ## Phase 1: Single Salary Affordability
 
-**User stories**: 1, 2, 8, 9, 30, 31
+**User stories**: 1, 2, 8, 9, 30, 31, 32, 33, 34
 
 ### What to build
 
@@ -40,10 +40,15 @@ This is the first demoable slice: a working page with a form, real calculations,
 - [ ] Loan amount displayed (property price − total deposit)
 - [ ] Lending multiple displayed (loan / salary)
 - [ ] % of take-home pay spent on housing displayed
-- [ ] Risk badge: < 30% = ✅ Safe, 30–45% = ⚠️ Stretch, > 45% = 🔴 Risky
+- [ ] Risk badge: ≤ 30% = ✅ Safe, > 30% and ≤ 45% = ⚠️ Stretch, > 45% = 🔴 Risky
+- [ ] Risk badges include text labels + icons (not colour alone) for accessibility
+- [ ] Input validation: salary required and > 0, deposit ≤ property price, rate 0–15%, inline error messages
 - [ ] Calculation logic is a pure function with no DOM dependency
 - [ ] Unit tests pass for mortgage calculation (validated against MSE calculator for known scenarios)
 - [ ] UI is clean, centered card layout, works on mobile (375px)
+- [ ] All form inputs have associated `<label>` elements, keyboard-navigable
+- [ ] Legal disclaimer in footer: "For informational purposes only, not financial advice"
+- [ ] Prominent banner: "Take-home pay is estimated. Full tax calculator included in next update."
 
 ---
 
@@ -53,16 +58,17 @@ This is the first demoable slice: a working page with a form, real calculations,
 
 ### What to build
 
-Replace the rough net income estimate from Phase 1 with a real UK tax calculator. The user's gross salary is run through Income Tax bands (2025–26), National Insurance Class 1, optional student loan deductions (Plan 1, 2, or 5), and optional pension contribution (salary sacrifice %). The resulting net monthly income feeds into the affordability calculation automatically.
+Replace the rough net income estimate from Phase 1 with a real UK tax calculator. The user's gross salary is run through Income Tax bands (2025–26), National Insurance Class 1, optional student loan deductions (Plan 1, 2, 4, 5, or Postgraduate), and optional pension contribution with a salary sacrifice / net pay toggle. The resulting net monthly income feeds into the affordability calculation automatically.
 
-New UI fields appear: student loan plan dropdown (None/1/2/5) and pension contribution % input.
+New UI fields appear: student loan plan dropdown (None/1/2/4/5/Postgraduate), pension contribution % input, and pension type toggle (salary sacrifice / net pay).
 
 ### Acceptance criteria
 
 - [ ] Income Tax calculated using 2025–26 bands (£12,570 personal allowance, 20% basic, 40% higher, 45% additional)
 - [ ] National Insurance calculated at Class 1 employee rates
-- [ ] Student loan deduction: Plan 1 (threshold £24,990, 9%), Plan 2 (threshold £27,295, 9%), Plan 5 (threshold £25,000, 9%)
-- [ ] Pension contribution % deducted (salary sacrifice — before tax)
+- [ ] Student loan deduction: Plan 1 (threshold £24,990, 9%), Plan 2 (threshold £27,295, 9%), Plan 4 (threshold £31,395, 9%), Plan 5 (threshold £25,000, 9%), Postgraduate (threshold £21,000, 6%)
+- [ ] Pension contribution toggle: salary sacrifice (before tax) or net pay (after tax)
+- [ ] Pension contribution % deducted according to selected method
 - [ ] Net monthly pay displayed to the user
 - [ ] Affordability % and risk badge now use real net income
 - [ ] Tax estimator is a pure function, tested independently
@@ -94,15 +100,19 @@ Add stamp duty (SDLT) calculation to the affordability output. A toggle lets the
 
 **User stories**: 3, 4
 
+**Note:** Phase 3 (Stamp Duty) and Phase 4 are independent and can be built in parallel.
+
 ### What to build
 
-Add a partner salary field (optional) that combines with the primary salary for borrowing power and net income. Add monthly service charge and ground rent fields. Total monthly housing cost now includes mortgage + service charge + ground rent. The affordability % and risk badge reflect the true all-in cost.
+Add a partner salary field (optional) that combines with the primary salary for borrowing power and net income. The partner gets their own student loan plan and pension inputs. Add monthly service charge and ground rent fields. Total monthly housing cost now includes mortgage + service charge + ground rent. The affordability % and risk badge reflect the true all-in cost.
 
 ### Acceptance criteria
 
 - [ ] Partner salary field (optional, defaults to 0)
+- [ ] Partner student loan plan dropdown (None/1/2/4/5/Postgraduate)
+- [ ] Partner pension contribution % and salary sacrifice / net pay toggle
 - [ ] Combined salary used for lending multiple and max borrowing
-- [ ] Partner salary runs through the same tax estimator (separate calculation)
+- [ ] Partner salary runs through the same tax estimator (separate calculation with partner's own student loan and pension settings)
 - [ ] Combined net monthly income used for affordability %
 - [ ] Service charge (£/month) and ground rent (£/month) fields added
 - [ ] Total monthly cost = mortgage + service charge + ground rent
@@ -126,7 +136,9 @@ A new tab: "Deposit Tracker". The user enters current savings, monthly contribut
 - [ ] Deposit target pre-filled from affordability calculator's deposit field (if entered)
 - [ ] Additional funds carried from affordability calculator — subtracted from target (user only needs to save the difference)
 - [ ] Tracker clearly shows: "You need £X. With £Y additional funds, you need to save £Z."
-- [ ] LISA bonus: 25% on contributions up to £4,000/year
+- [ ] LISA bonus: 25% on contributions up to £4,000/year (max bonus £1,000/year)
+- [ ] LISA property price cap warning: if deposit target implies property > £450,000, show warning that LISA funds cannot be used and exclude bonus from projection
+- [ ] LISA age eligibility note displayed: "You must be 18–39 to open a LISA"
 - [ ] Projected savings displayed year-by-year
 - [ ] Chart.js timeline chart showing savings growth over time
 - [ ] "X months to reach your target" displayed prominently

@@ -1,0 +1,26 @@
+{
+  "name": "londonhousingcalculator",
+  "version": "1.0.0",
+  "description": "Realistic affordability calculator for London first-time buyers.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mikanzui/LondonHousingCalculator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/mikanzui/LondonHousingCalculator/issues"
+  },
+  "homepage": "https://github.com/mikanzui/LondonHousingCalculator#readme",
+  "devDependencies": {
+    "vitest": "^4.1.2"
+  }
+}

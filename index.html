@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Free London housing affordability calculator for first-time buyers. See your real monthly cost, take-home pay, stamp duty, and risk rating.">
+  <meta property="og:title" content="London Housing Calculator">
+  <meta property="og:description" content="Realistic affordability for real London buyers. Free mortgage calculator with built-in UK tax estimator.">
+  <title>London Housing Calculator</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <header>
+    <h1>London Housing Calculator</h1>
+    <p class="tagline">Realistic affordability for real London buyers</p>
+  </header>
+
+  <main>
+    <form id="affordability-form" novalidate>
+      <!-- Income Section -->
+      <fieldset>
+        <legend>Your Income</legend>
+
+        <div class="form-group">
+          <label for="salary">Annual Gross Salary (£) <span class="required">*</span></label>
+          <input type="number" id="salary" name="salary" min="1" step="100" required placeholder="e.g. 35000" aria-required="true">
+        </div>
+
+        <div class="form-group">
+          <label for="student-loan">Student Loan Plan</label>
+          <select id="student-loan" name="student-loan">
+            <option value="none">None</option>
+            <option value="plan1">Plan 1</option>
+            <option value="plan2">Plan 2</option>
+            <option value="plan4">Plan 4 (Scotland)</option>
+            <option value="plan5">Plan 5</option>
+            <option value="postgrad">Postgraduate Loan</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pension-percent">Pension Contribution (%)</label>
+            <input type="number" id="pension-percent" name="pension-percent" min="0" max="100" step="0.5" value="0">
+          </div>
+          <div class="form-group">
+            <label for="pension-type">Pension Type</label>
+            <select id="pension-type" name="pension-type">
+              <option value="sacrifice">Salary Sacrifice</option>
+              <option value="netpay">Net Pay</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Property Section -->
+      <fieldset>
+        <legend>Property Details</legend>
+
+        <div class="form-group">
+          <label for="property-price">Property Price (£) <span class="required">*</span></label>
+          <input type="number" id="property-price" name="property-price" min="1" step="1000" required placeholder="e.g. 350000" aria-required="true">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="deposit">Your Deposit (£) <span class="required">*</span></label>
+            <input type="number" id="deposit" name="deposit" min="0" step="1000" required value="0" aria-required="true">
+          </div>
+          <div class="form-group">
+            <label for="additional-funds">
+              Additional Funds (£)
+              <span class="tooltip" aria-label="Gift from family, inheritance, bonus, or any other lump sum">ⓘ</span>
+            </label>
+            <input type="number" id="additional-funds" name="additional-funds" min="0" step="1000" value="0">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="interest-rate">Interest Rate (%)</label>
+            <input type="number" id="interest-rate" name="interest-rate" min="0" max="15" step="0.1" value="5.5">
+          </div>
+          <div class="form-group">
+            <label for="mortgage-term">Mortgage Term</label>
+            <select id="mortgage-term" name="mortgage-term">
+              <option value="15">15 years</option>
+              <option value="20">20 years</option>
+              <option value="25">25 years</option>
+              <option value="30" selected>30 years</option>
+              <option value="35">35 years</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group checkbox-group">
+          <input type="checkbox" id="first-time-buyer" name="first-time-buyer" checked>
+          <label for="first-time-buyer">I am a first-time buyer</label>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="btn-calculate">Calculate</button>
+    </form>
+
+    <section id="results" hidden aria-live="polite"></section>
+  </main>
+
+  <footer>
+    <p class="disclaimer">This tool is for informational purposes only and does not constitute financial advice. Calculations are estimates based on publicly available data. Consult a qualified mortgage adviser before making financial decisions.</p>
+    <p class="tax-year">Based on 2025–26 UK tax year</p>
+  </footer>
+
+  <script type="module" src="js/ui.js"></script>
+</body>
+</html>

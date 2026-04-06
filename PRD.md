@@ -32,8 +32,8 @@ The tool targets first-time buyers (including those considering shared ownership
 3. As a joint applicant, I want to add a partner's salary, so that our combined borrowing power is calculated.
 4. As a London flat buyer, I want to include service charges and ground rent in my monthly cost, so that I see the true cost of leasehold living.
 5. As a user, I want to see my take-home pay calculated automatically from my gross salary (Income Tax, NI, student loan, pension), so that I don't need a separate tax calculator.
-6. As a user with a student loan, I want to select my repayment plan (Plan 1, 2, or 5), so that my net income is accurate.
-7. As a user with a workplace pension, I want to enter my pension contribution %, so that my disposable income reflects reality.
+6. As a user with a student loan, I want to select my repayment plan (Plan 1, 2, 4, 5, or Postgraduate), so that my net income is accurate.
+7. As a user with a workplace pension, I want to enter my pension contribution % and select salary sacrifice or net pay, so that my disposable income reflects reality.
 8. As a user, I want to see what % of my take-home pay goes to housing, so that I understand my financial risk.
 9. As a user, I want a clear risk rating (Safe / Stretch / Risky) colour-coded on screen, so that I can quickly judge affordability.
 10. As a first-time buyer, I want stamp duty calculated automatically with first-time buyer relief applied, so that I know my upfront costs.
@@ -59,6 +59,8 @@ The tool targets first-time buyers (including those considering shared ownership
 30. As a user, I want to adjust the interest rate, so that I can model different rate scenarios (e.g. rates dropping or rising).
 31. As a user, I want to select different mortgage terms (15/20/25/30/35 years), so that I can see how the term affects my monthly payment.
 32. As a buyer receiving financial help from family, I want to enter additional funds separately from my own savings, so that my total deposit is accurate and the deposit tracker knows how much I still need to save myself.
+33. As a user, I want to see a legal disclaimer that this tool is not financial advice, so that I understand its limitations.
+34. As a user with accessibility needs, I want the tool to be keyboard-navigable and screen-reader friendly, so that I can use it regardless of ability.
 
 ---
 
@@ -68,11 +70,11 @@ The tool targets first-time buyers (including those considering shared ownership
 
 The application is composed of these key modules:
 
-1. **Tax Estimator Module** — Calculates UK net (take-home) pay from gross salary. Handles Income Tax bands, National Insurance, student loan plans (1/2/5), and pension contribution deductions. Pure function: salary in → net monthly income out.
+1. **Tax Estimator Module** — Calculates UK net (take-home) pay from gross salary. Handles Income Tax bands, National Insurance, student loan plans (1/2/4/5/Postgraduate), and pension contribution deductions (salary sacrifice or net pay). Pure function: salary in → net monthly income out.
 
 2. **Mortgage Calculator Module** — Computes monthly mortgage payment using standard amortisation formula. Pure function: loan amount, rate, term → monthly payment.
 
-3. **Stamp Duty Module** — Calculates SDLT for England. Supports first-time buyer relief and standard rates. Pure function: property price, first-time-buyer flag → stamp duty amount.
+3. **Stamp Duty Module** — Calculates SDLT for England. Supports first-time buyer relief and standard rates (see full band tables below). Pure function: property price, first-time-buyer flag → stamp duty amount.
 
 4. **Deposit Projection Module** — Projects savings over time including monthly contributions, compound growth, and LISA 25% government bonus (capped at £4,000/year contributions). Pure function: current savings, monthly amount, LISA flag, growth rate, target → timeline array.
 
@@ -108,8 +110,8 @@ The application is composed of these key modules:
 - 2025–26 UK tax year bands (auto-updated as needed)
 - Income Tax: Personal allowance £12,570, Basic 20%, Higher 40%, Additional 45%
 - National Insurance: Class 1 employee rates
-- Student Loan: Plan 1 (threshold £24,990, 9%), Plan 2 (threshold £27,295, 9%), Plan 5 (threshold £25,000, 9%)
-- Pension: User-entered % deducted before tax calculation (salary sacrifice) or after (net pay)
+- Student Loan: Plan 1 (threshold £24,990, 9%), Plan 2 (threshold £27,295, 9%), Plan 4 (threshold £31,395, 9%), Plan 5 (threshold £25,000, 9%), Postgraduate (threshold £21,000, 6%)
+- Pension: User-entered % with toggle for salary sacrifice (deducted before tax) or net pay (deducted after tax). Default: salary sacrifice.
 
 ### Pro vs Free Gating
 
@@ -117,10 +119,68 @@ The application is composed of these key modules:
 - **Pro (paid):** Area Affordability Finder, Property Comparison
 - Gating implemented client-side initially (honour system / soft gate). Stripe or Gumroad integration for payment.
 
+### Stamp Duty Bands (SDLT — England, 2025–26)
+
+**First-time buyer relief:**
+- £0–£425,000: 0%
+- £425,001–£625,000: 5%
+- Over £625,000: no FTB relief — standard rates apply
+
+**Standard rates (non-FTB):**
+- £0–£250,000: 0%
+- £250,001–£925,000: 5%
+- £925,001–£1,500,000: 10%
+- Over £1,500,000: 12%
+
+### Risk Rating Thresholds
+
+- **Safe (green):** housing cost ≤ 30% of net monthly income
+- **Stretch (amber):** housing cost > 30% and ≤ 45% of net monthly income
+- **Risky (red):** housing cost > 45% of net monthly income
+
+### LISA Constraints
+
+- Government bonus: 25% on contributions up to £4,000/year (max bonus £1,000/year)
+- Property price cap: LISA funds can only be used for properties up to **£450,000**
+- Age eligibility: must be 18–39 to open; contributions accepted until age 50
+- If the property exceeds £450,000, the tool should warn the user that LISA funds cannot be used and exclude the bonus from projections
+
+### Input Validation Rules
+
+- Salary: required, must be > 0
+- Property price: required, must be > 0
+- Deposit: required, must be ≥ 0 and ≤ property price
+- Additional funds: optional, defaults to £0, must be ≥ 0
+- Total deposit (deposit + additional funds) must be < property price
+- Interest rate: must be ≥ 0 and ≤ 15%
+- Pension %: must be ≥ 0 and ≤ 100%
+- Service charge / ground rent: must be ≥ 0
+- Monthly savings contribution: must be ≥ 0
+- Display inline error messages below invalid fields; do not use alert() dialogs
+
+### Cross-Tab State Sharing
+
+- All tabs share a single state object held in memory (plain JS object)
+- When the user enters salary, deposit, and property price on the Affordability tab, those values are available to the Deposit Tracker, Area Finder, and Compare tabs
+- State is not persisted across page reloads in v1 (no localStorage). Future enhancement.
+
+### Legal Disclaimer
+
+- A persistent footer on every page: "This tool is for informational purposes only and does not constitute financial advice. Calculations are estimates based on publicly available data. Consult a qualified mortgage adviser before making financial decisions."
+
+### Accessibility
+
+- Minimum WCAG 2.1 AA compliance
+- All form inputs must have associated `<label>` elements
+- Risk badges must not rely on colour alone — include text labels (Safe / Stretch / Risky) and icons
+- Tab navigation must be fully keyboard-accessible
+- Colour contrast ratio ≥ 4.5:1 for text
+
 ### Hosting & Deployment
 
 - Netlify or Vercel free tier, auto-deploy from GitHub.
 - Optional custom `.co.uk` domain (~£5/year).
+- Chart.js pinned to v4.x (specify exact version in CDN URL to prevent breaking changes).
 
 ---
 
@@ -177,6 +237,19 @@ Tests should verify **external behaviour** (given these inputs, expect these out
 - **Postcode / ward-level area data** — Pro upgrade path for later; MVP is borough-level only.
 - **Email capture / marketing automation** — Deferred to Phase 4.
 - **Native mobile app** — Web-only; mobile-responsive design is sufficient.
+- **Student Loan Plan 4 (Scotland) and Postgraduate Loan** — Included in v1 tax estimator for completeness, as many London workers have these plans.
+
+---
+
+## Tax Year Update Process
+
+UK tax bands change each April. To update:
+1. Check HMRC website for new tax year bands, NI thresholds, and student loan thresholds
+2. Update the constants in the Tax Estimator module
+3. Update the stamp duty bands if changed
+4. Run all unit tests to verify calculations
+5. Update the "tax year" label shown in the UI (e.g. "Based on 2025–26 tax year")
+6. Document the change in a CHANGELOG
 
 ---
 
