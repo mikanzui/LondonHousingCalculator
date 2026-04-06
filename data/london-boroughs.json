@@ -5,6 +5,7 @@
     {
       "name": "Barking and Dagenham",
       "zone": "5–6",
+      "rightmoveRegionId": "93929",
       "prices": {
         "flat": { "avg": 215000, "1bed": 175000, "2bed": 225000, "3bed": 265000, "4bed": null },
         "terraced": { "avg": 340000, "1bed": null, "2bed": 310000, "3bed": 350000, "4bed": 400000 },
@@ -18,6 +19,7 @@
     {
       "name": "Bexley",
       "zone": "5–6",
+      "rightmoveRegionId": "93930",
       "prices": {
         "flat": { "avg": 225000, "1bed": 185000, "2bed": 235000, "3bed": 275000, "4bed": null },
         "terraced": { "avg": 360000, "1bed": null, "2bed": 330000, "3bed": 370000, "4bed": 420000 },
@@ -31,6 +33,7 @@
     {
       "name": "Croydon",
       "zone": "5–6",
+      "rightmoveRegionId": "93939",
       "prices": {
         "flat": { "avg": 245000, "1bed": 200000, "2bed": 255000, "3bed": 300000, "4bed": null },
         "terraced": { "avg": 380000, "1bed": null, "2bed": 345000, "3bed": 390000, "4bed": 445000 },
@@ -44,6 +47,7 @@
     {
       "name": "Greenwich",
       "zone": "2–4",
+      "rightmoveRegionId": "93943",
       "prices": {
         "flat": { "avg": 310000, "1bed": 260000, "2bed": 325000, "3bed": 380000, "4bed": null },
         "terraced": { "avg": 450000, "1bed": null, "2bed": 415000, "3bed": 465000, "4bed": 530000 },
@@ -57,6 +61,7 @@
     {
       "name": "Hackney",
       "zone": "2",
+      "rightmoveRegionId": "93944",
       "prices": {
         "flat": { "avg": 420000, "1bed": 350000, "2bed": 440000, "3bed": 520000, "4bed": null },
         "terraced": { "avg": 750000, "1bed": null, "2bed": 680000, "3bed": 780000, "4bed": 900000 },
@@ -70,6 +75,7 @@
     {
       "name": "Hounslow",
       "zone": "4–5",
+      "rightmoveRegionId": "93950",
       "prices": {
         "flat": { "avg": 285000, "1bed": 235000, "2bed": 300000, "3bed": 350000, "4bed": null },
         "terraced": { "avg": 420000, "1bed": null, "2bed": 385000, "3bed": 435000, "4bed": 495000 },
@@ -83,6 +89,7 @@
     {
       "name": "Lewisham",
       "zone": "2–3",
+      "rightmoveRegionId": "93955",
       "prices": {
         "flat": { "avg": 300000, "1bed": 250000, "2bed": 315000, "3bed": 370000, "4bed": null },
         "terraced": { "avg": 480000, "1bed": null, "2bed": 440000, "3bed": 495000, "4bed": 565000 },
@@ -96,6 +103,7 @@
     {
       "name": "Newham",
       "zone": "3",
+      "rightmoveRegionId": "93961",
       "prices": {
         "flat": { "avg": 290000, "1bed": 240000, "2bed": 305000, "3bed": 355000, "4bed": null },
         "terraced": { "avg": 430000, "1bed": null, "2bed": 395000, "3bed": 445000, "4bed": 505000 },
@@ -109,6 +117,7 @@
     {
       "name": "Southwark",
       "zone": "1–2",
+      "rightmoveRegionId": "93968",
       "prices": {
         "flat": { "avg": 410000, "1bed": 345000, "2bed": 430000, "3bed": 510000, "4bed": null },
         "terraced": { "avg": 680000, "1bed": null, "2bed": 620000, "3bed": 710000, "4bed": 820000 },
@@ -122,6 +131,7 @@
     {
       "name": "Tower Hamlets",
       "zone": "1–2",
+      "rightmoveRegionId": "93972",
       "prices": {
         "flat": { "avg": 400000, "1bed": 330000, "2bed": 420000, "3bed": 500000, "4bed": null },
         "terraced": { "avg": 620000, "1bed": null, "2bed": 570000, "3bed": 650000, "4bed": 750000 },
@@ -135,6 +145,7 @@
     {
       "name": "Waltham Forest",
       "zone": "3–4",
+      "rightmoveRegionId": "93974",
       "prices": {
         "flat": { "avg": 310000, "1bed": 255000, "2bed": 325000, "3bed": 380000, "4bed": null },
         "terraced": { "avg": 490000, "1bed": null, "2bed": 450000, "3bed": 505000, "4bed": 575000 },
@@ -148,6 +159,7 @@
     {
       "name": "Lambeth",
       "zone": "2–3",
+      "rightmoveRegionId": "93953",
       "prices": {
         "flat": { "avg": 390000, "1bed": 325000, "2bed": 410000, "3bed": 485000, "4bed": null },
         "terraced": { "avg": 680000, "1bed": null, "2bed": 625000, "3bed": 710000, "4bed": 810000 },
@@ -161,6 +173,7 @@
     {
       "name": "Camden",
       "zone": "1–2",
+      "rightmoveRegionId": "93935",
       "prices": {
         "flat": { "avg": 550000, "1bed": 450000, "2bed": 580000, "3bed": 700000, "4bed": null },
         "terraced": { "avg": 1100000, "1bed": null, "2bed": 950000, "3bed": 1150000, "4bed": 1350000 },
@@ -174,6 +187,7 @@
     {
       "name": "Islington",
       "zone": "1–2",
+      "rightmoveRegionId": "93951",
       "prices": {
         "flat": { "avg": 500000, "1bed": 410000, "2bed": 525000, "3bed": 640000, "4bed": null },
         "terraced": { "avg": 1000000, "1bed": null, "2bed": 880000, "3bed": 1050000, "4bed": 1250000 },
@@ -187,6 +201,7 @@
     {
       "name": "Westminster",
       "zone": "1",
+      "rightmoveRegionId": "93976",
       "prices": {
         "flat": { "avg": 700000, "1bed": 550000, "2bed": 750000, "3bed": 950000, "4bed": 1300000 },
         "terraced": { "avg": 2000000, "1bed": null, "2bed": 1600000, "3bed": 2100000, "4bed": 2600000 },

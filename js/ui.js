@@ -15,6 +15,69 @@ import { calculateTakeHomePay } from './tax.js';
 import { calculateStampDuty } from './stamp-duty.js';
 import { projectDeposit } from './deposit.js';
 import { rankBoroughs, getBoroughPrice } from './area-finder.js';
+import { buildSearchUrl } from './rightmove.js';
+
+// ============================================================
+//  Shared State
+// ============================================================
+const appState = {
+  salary: 0,
+  propertyPrice: 0,
+  deposit: 0,
+  additionalFunds: 0,
+  interestRate: 5.5,
+  mortgageTerm: 30,
+  studentLoanPlan: 'none',
+  pensionPercent: 0,
+  salarySacrifice: true,
+  isFirstTimeBuyer: true,
+};
+
+function updateAppState(data) {
+  Object.assign(appState, data);
+  updateProfileBar();
+  autoFillTabs();
+}
+
+// Profile bar
+const profileBar = document.getElementById('profile-bar');
+function updateProfileBar() {
+  if (!appState.salary) { profileBar.hidden = true; return; }
+  profileBar.hidden = false;
+  document.getElementById('pb-salary').textContent = `£${Math.round(appState.salary).toLocaleString('en-GB')} salary`;
+  document.getElementById('pb-deposit').textContent = `£${Math.round(appState.deposit + appState.additionalFunds).toLocaleString('en-GB')} deposit`;
+  document.getElementById('pb-rate').textContent = `${appState.interestRate}% rate`;
+  document.getElementById('pb-term').textContent = `${appState.mortgageTerm}yr term`;
+}
+
+// Auto-fill other tabs from shared state
+function autoFillTabs() {
+  // Deposit tab
+  const depTarget = document.getElementById('dep-target');
+  const depPropPrice = document.getElementById('dep-property-price');
+  if (depTarget && !depTarget.value) depTarget.value = appState.deposit + appState.additionalFunds || '';
+  if (depPropPrice && !depPropPrice.value && appState.propertyPrice) depPropPrice.value = appState.propertyPrice;
+
+  // Area finder tab
+  const areaSalary = document.getElementById('area-salary');
+  const areaDeposit = document.getElementById('area-deposit');
+  if (areaSalary && !areaSalary.value) areaSalary.value = appState.salary || '';
+  if (areaDeposit && !areaDeposit.value) areaDeposit.value = appState.deposit + appState.additionalFunds || '';
+
+  // Compare tab
+  const cmpSalary = document.getElementById('cmp-salary');
+  const cmpFtb = document.getElementById('cmp-ftb');
+  if (cmpSalary && !cmpSalary.value) cmpSalary.value = appState.salary || '';
+  if (cmpFtb) cmpFtb.checked = appState.isFirstTimeBuyer;
+
+  // Compare property A defaults
+  const cmpADeposit = document.getElementById('cmp-a-deposit');
+  const cmpARate = document.getElementById('cmp-a-rate');
+  const cmpBRate = document.getElementById('cmp-b-rate');
+  if (cmpADeposit && !cmpADeposit.value) cmpADeposit.value = appState.deposit + appState.additionalFunds || '';
+  if (cmpARate && appState.interestRate) cmpARate.value = appState.interestRate;
+  if (cmpBRate && appState.interestRate) cmpBRate.value = appState.interestRate;
+}
 
 // ============================================================
 //  Tabs
@@ -147,6 +210,10 @@ function renderAff(d) {
   const risk = getRiskRating(pct);
   const sdlt = calculateStampDuty(d.propertyPrice, d.isFirstTimeBuyer);
 
+  // Budget for Rightmove search
+  const budget = Math.round(d.salary * 4.5 + totalDep);
+  const rmUrl = buildSearchUrl(null, { maxPrice: budget });
+
   affResults.innerHTML = `
     <h2 class="results-title">Your Results</h2>
     <div class="result-grid">
@@ -157,6 +224,10 @@ function renderAff(d) {
       <div class="result-card"><h3>% of Income on Housing</h3><p class="result-value">${pct}%</p>${riskBadgeHTML(risk)}</div>
       <div class="result-card"><h3>Stamp Duty (SDLT)</h3><p class="result-value">${fmt(sdlt.stampDuty)}</p><p class="result-note">${sdlt.effectiveRate}% effective${sdlt.bandsUsed === 'ftb' ? ' · FTB relief' : ''}</p></div>
     </div>
+    <a href="${rmUrl}" target="_blank" rel="noopener noreferrer" class="btn-rightmove">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Search Properties in Budget on Rightmove
+    </a>
     <details class="tax-breakdown">
       <summary>Tax Breakdown (2025–26)</summary>
       <table><tbody>
@@ -177,7 +248,11 @@ affForm.addEventListener('submit', (e) => {
   e.preventDefault();
   clearAllErrors(affForm);
   const d = getAffData();
-  if (validateAff(d)) renderAff(d);
+  if (validateAff(d)) {
+    // Save to shared state
+    updateAppState(d);
+    renderAff(d);
+  }
 });
 
 // ============================================================
@@ -261,12 +336,12 @@ function renderDepositChart(timeline, useLisa, target) {
 
   const labels = timeline.map(y => `Year ${y.year}`);
   const datasets = [
-    { label: 'Total Saved', data: timeline.map(y => Math.round(y.total)), borderColor: '#0984e3', backgroundColor: 'rgba(9,132,227,0.1)', fill: true, tension: 0.3 },
+    { label: 'Total Saved', data: timeline.map(y => Math.round(y.total)), borderColor: '#6c5ce7', backgroundColor: 'rgba(108,92,231,0.1)', fill: true, tension: 0.3 },
   ];
   if (useLisa) {
     const cumBonus = []; let sum = 0;
     for (const y of timeline) { sum += y.lisaBonus; cumBonus.push(Math.round(sum)); }
-    datasets.push({ label: 'LISA Bonus (cumulative)', data: cumBonus, borderColor: '#48bb78', backgroundColor: 'rgba(72,187,120,0.1)', fill: true, tension: 0.3 });
+    datasets.push({ label: 'LISA Bonus (cumulative)', data: cumBonus, borderColor: '#00b894', backgroundColor: 'rgba(0,184,148,0.1)', fill: true, tension: 0.3 });
   }
 
   depChart = new Chart(ctx, {
@@ -276,7 +351,6 @@ function renderDepositChart(timeline, useLisa, target) {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        annotation: target ? { annotations: { target: { type: 'line', yMin: target, yMax: target, borderColor: '#f56565', borderDash: [5, 5], label: { content: 'Target', display: true } } } } : undefined,
         legend: { position: 'bottom', labels: { font: { family: 'Inter' } } },
       },
       scales: {
@@ -344,11 +418,18 @@ areaForm.addEventListener('submit', async (e) => {
   if (ranked.length === 0) {
     html += `<p style="padding:1rem; text-align:center; color:var(--clr-text-muted)">No boroughs match your criteria. Try increasing your budget or comfort level.</p>`;
   } else {
+    // Map property type for Rightmove
+    const rmType = propType === 'any' ? '' : propType;
+    const rmBeds = beds === 'any' ? '' : beds.replace('bed', '');
+
     html += `<div style="overflow-x:auto"><table class="borough-table"><thead><tr>`;
-    html += `<th>Borough</th><th class="text-right">Avg Price</th><th class="text-right">Monthly</th><th class="text-right">% Income</th><th class="text-right">5yr Change</th><th>Rating</th>`;
+    html += `<th>Borough</th><th class="text-right">Avg Price</th><th class="text-right">Monthly</th><th class="text-right">% Income</th><th class="text-right">5yr Change</th><th>Rating</th><th></th>`;
     html += `</tr></thead><tbody>`;
     for (const b of ranked) {
       const cls = b.riskRating === 'safe' ? 'borough-affordable' : b.riskRating === 'stretch' ? 'borough-stretch' : 'borough-unaffordable';
+      const rmLink = b.rightmoveRegionId
+        ? buildSearchUrl(b.rightmoveRegionId, { maxPrice: Math.round(maxAffordablePrice), minBeds: rmBeds, propertyType: rmType })
+        : null;
       html += `<tr>`;
       html += `<td>${b.name}</td>`;
       html += `<td class="text-right">${fmtInt(b.avgPrice)}</td>`;
@@ -356,9 +437,11 @@ areaForm.addEventListener('submit', async (e) => {
       html += `<td class="text-right ${cls}">${b.affordabilityPercent}%</td>`;
       html += `<td class="text-right">${b.change5yr > 0 ? '+' : ''}${b.change5yr}%</td>`;
       html += `<td>${riskBadgeHTML(b.riskRating)}</td>`;
+      html += `<td>${rmLink ? `<a href="${rmLink}" target="_blank" rel="noopener noreferrer" class="rm-link" title="View listings on Rightmove">View Listings</a>` : ''}</td>`;
       html += `</tr>`;
     }
     html += `</tbody></table></div>`;
+    html += `<p class="rm-disclaimer">Links open Rightmove in a new tab. We are not affiliated with Rightmove.</p>`;
   }
 
   areaResults.innerHTML = html;

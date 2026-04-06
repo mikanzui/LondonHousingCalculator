@@ -319,3 +319,93 @@ Final responsive audit and production polish. Ensure all tabs work correctly at 
 - [ ] Tabular nums on all financial figures
 - [ ] Inline validation errors near field with `role="alert"`
 - [ ] Tab navigation fully keyboard-accessible
+
+---
+
+## Phase 10: UX Overhaul — Shared State, Visual Refresh, Rightmove Integration
+
+### Phase 10A: Shared State Across Tabs
+
+**Problem:** Each tab asks for salary, deposit, etc. independently. User has to re-enter the same information on every tab.
+
+**Solution:** Introduce a global `appState` object in `ui.js` that holds core user inputs (salary, deposit, student loan, pension, property price, FTB status, interest rate, mortgage term). When the user fills in the Affordability tab and calculates:
+- Their salary, deposit, studentLoan, pension, rate, term, and FTB status are stored in `appState`
+- Other tabs auto-populate from `appState` — salary fields, deposit fields, rate/term on Compare tab
+- Deposit tab auto-fills "Deposit Target" from the affordability deposit field
+- Area Finder auto-fills salary and deposit
+- Compare auto-fills salary and FTB checkbox
+- Each tab can still override locally, but defaults come from shared state
+- A "summary bar" below the tabs shows current profile at a glance: "£45,000 salary · £30,000 deposit · 5.5% rate"
+
+**Acceptance criteria:**
+- [ ] `appState` object holds: salary, deposit, additionalFunds, propertyPrice, studentLoan, pensionPercent, pensionType, interestRate, mortgageTerm, isFirstTimeBuyer
+- [ ] Affordability form submit writes to `appState`
+- [ ] Deposit tab auto-fills target from `appState.deposit + appState.additionalFunds`
+- [ ] Area Finder auto-fills salary + deposit from `appState`
+- [ ] Compare auto-fills salary + FTB from `appState`
+- [ ] Summary bar visible below tabs showing key profile values
+- [ ] User can still override any auto-filled value per tab
+
+### Phase 10B: Visual Redesign — Dark Gradient Theme + Hero Imagery
+
+**Problem:** The app looks very white/clinical. Needs more visual personality and warmth.
+
+**Solution:** Shift to a dark navy header/hero with gradient accents and warmer surface colors. Add a London skyline SVG illustration in the header. Use subtle gradient backgrounds on cards, a glassmorphism-lite effect on the tab bar. Replace the flat #f0f4f8 background with a subtle gradient. Add colored accent borders on result cards matching their risk rating. Overall vibe: modern fintech (like Monzo/Starling marketing pages).
+
+**Key changes:**
+- Header: dark navy (`#0f172a`) → gradient into page background, with inline SVG London skyline silhouette
+- Tab bar: frosted glass effect (backdrop-blur + semi-transparent bg)
+- Cards: subtle left border accent color matching section (blue for inputs, green/amber/red for results)
+- Result cards: gradient backgrounds instead of flat gray
+- Buttons: gradient primary with subtle glow on hover
+- Background: warm gradient from `#f8fafc` to `#edf2f7`
+- Add subtle pattern/texture SVG overlay on header
+- Progress indicators / step numbers on tabs
+
+**Acceptance criteria:**
+- [ ] Header has dark gradient with London skyline SVG
+- [ ] Tab bar has frosted glass / semi-transparent effect
+- [ ] Page background is subtle warm gradient, not flat white
+- [ ] Cards have colored left-border accents
+- [ ] Result cards use gradient backgrounds
+- [ ] CTA button has gradient + glow hover effect
+- [ ] All contrast ratios still meet WCAG AA (4.5:1 text)
+- [ ] Responsive across 375px / 768px / 1024px
+- [ ] prefers-reduced-motion still respected
+
+### Phase 10C: Rightmove Property Search Integration
+
+**Problem:** Users calculate their budget then have to manually go search Rightmove. No direct link between calculator results and real listings.
+
+**Solution:** Rightmove has no public API, but their search URLs are structured and predictable. We build a "Search Properties" feature that:
+1. Constructs Rightmove search URLs from the user's budget and borough selection
+2. Opens results in a new tab on Rightmove
+3. On the Area Finder tab, each borough row gets a "View Listings" link that opens Rightmove filtered to that borough + price range
+
+**Rightmove URL structure:** `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=REGION%5E{id}&maxPrice={max}&minBedrooms={beds}&propertyTypes={type}&mustHave=&dontShow=&furnishTypes=&keywords=`
+
+**Implementation:**
+- `data/london-boroughs.json` gets a new `rightmoveRegionId` field per borough
+- `js/rightmove.js` module: `buildSearchUrl(boroughRegionId, { maxPrice, minBeds, propertyType })` → URL string
+- Area Finder table rows get a "View on Rightmove" button
+- Affordability results get a "Search Properties in Budget" button that links to Rightmove with maxPrice = budget
+- New "Properties" tab (or section within Area Finder) that shows Rightmove search links organized by borough with visual cards
+
+**Acceptance criteria:**
+- [ ] Each borough in JSON has a `rightmoveRegionId` field
+- [ ] `buildSearchUrl()` pure function constructs valid Rightmove URLs
+- [ ] Area Finder rows have "View Listings" link opening Rightmove in new tab
+- [ ] Affordability results have "Search Properties" button
+- [ ] URLs correctly encode price range, bedroom filter, property type
+- [ ] Unit tests cover URL construction with various parameters
+- [ ] Links open in `_blank` with `rel="noopener noreferrer"`
+- [ ] Clear disclaimer: "Links to Rightmove. We are not affiliated with Rightmove."
+
+### Phase 10D: Integration + Polish
+
+- [ ] All shared state flows tested across tab navigation
+- [ ] Summary bar updates live as user changes values
+- [ ] Rightmove links work for all 15 boroughs
+- [ ] All 73+ tests still passing + new tests for rightmove URL builder
+- [ ] Visual regression check at 375px, 768px, 1024px
+- [ ] Committed and pushed to GitHub
